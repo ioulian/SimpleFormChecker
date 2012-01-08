@@ -577,7 +577,7 @@
 				// Check if an error is already there
 				if (object.parent(":first").children(this.settings.errorTextElement + ".errorText").length === 0) {
 					// If not, add a new p.errorText to it.
-					var fieldErrorText = "<" + this.settings.errorTextElement + " class="errorText">" + text + "</" + this.settings.errorTextElement + ">";
+					var fieldErrorText = "<" + this.settings.errorTextElement + " class=\"errorText\">" + text + "</" + this.settings.errorTextElement + ">";
 					$(fieldErrorText)
 						.hide()
 						.appendTo(object.parent(":first"))
