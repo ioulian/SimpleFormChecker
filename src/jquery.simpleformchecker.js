@@ -35,16 +35,16 @@
 			 * Checks for email adresses. This validates most of the email adresses
 			 */
 			Email : {
-				Class : 'email',
-				ErrorText : 'This must be a valid email address',
+				Class : "email",
+				ErrorText : "This must be a valid email address",
 				Pattern : new RegExp(/^(("[\w-\s]+")|([\w\-]+(?:\.[\w\-]+)*)|("[\w\-\s]+")([\w\-]+(?:\.[\w\-]+)*))(@((?:[\w\-]+\.)*\w[\w\-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
 			},
 			/**
 			 * Checks for url
 			 */
 			Url : {
-				Class : 'url',
-				ErrorText : 'This must be a valid url',
+				Class : "url",
+				ErrorText : "This must be a valid url",
 				Pattern : new RegExp(/(^|\s)((https?:\/\/)?[\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?)/i)
 			},
 			/**
@@ -53,24 +53,24 @@
 			 * Valid string(s): ###.###.###.###
 			 */
 			Ip : {
-				Class : 'ip',
-				ErrorText : 'This must be a valid IP number',
+				Class : "ip",
+				ErrorText : "This must be a valid IP number",
 				Pattern : new RegExp(/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/i)
 			},
 			/**
 			 * Only numbers are allowed
 			 */
 			Number : {
-				Class : 'number',
-				ErrorText : 'This must contain only numbers',
+				Class : "number",
+				ErrorText : "This must contain only numbers",
 				Pattern : new RegExp(/^[0-9]*$/i)
 			},
 			/**
 			 * Only characters are allowed
 			 */
 			Characters : {
-				Class : 'characters',
-				ErrorText : 'This must contain only characters',
+				Class : "characters",
+				ErrorText : "This must contain only characters",
 				Pattern : new RegExp(/^[a-zA-Z]*$/i)
 			},
 			/**
@@ -79,8 +79,8 @@
 			 * Valid string(s): 01-31
 			 */
 			Day : {
-				Class : 'day',
-				ErrorText : 'This must be a valid day',
+				Class : "day",
+				ErrorText : "This must be a valid day",
 				Pattern : new RegExp(/^([1-9]|[1-2][0-9]|3[01])$/i)
 			},
 			/**
@@ -89,8 +89,8 @@
 			 * Valid string(s): 01-31
 			 */
 			Month : {
-				Class : 'month',
-				ErrorText : 'This must be a valid month',
+				Class : "month",
+				ErrorText : "This must be a valid month",
 				Pattern : new RegExp(/^(([0]{0,1}[1-9])|(1[0-2]))$/i)
 			},
 			/**
@@ -99,8 +99,8 @@
 			 * Valid string(s): 1900 - 2099
 			 */
 			Year : {
-				Class : 'year',
-				ErrorText : 'This must be a valid year',
+				Class : "year",
+				ErrorText : "This must be a valid year",
 				Pattern : new RegExp(/^(19|20)\d\d$/i)
 			},
 			/**
@@ -109,8 +109,8 @@
 			 * Valid string(s): DD MM YYYY || DD-MM-YYYY || DD/MM/YYYY || DD.MM.YYYY
 			 */
 			Date : {
-				Class : 'date',
-				ErrorText : 'This must be a valid date (DD/MM/YYYY)',
+				Class : "date",
+				ErrorText : "This must be a valid date (DD/MM/YYYY)",
 				Pattern : new RegExp(/^((0?[1-9]|[12][0-9]|3[01])[\- \/.](0?[1-9]|1[012])[\- \/.](19|20)?[0-9]{2})*$/i)
 			},
 			/**
@@ -119,8 +119,8 @@
 			 * Valid string(s): MM DD YYYY || MM-DD-YYYY || MM/DD/YYYY || MM.DD.YYYY
 			 */
 			UsDate : {
-				Class : 'usdate',
-				ErrorText : 'This must be a valid date (MM/DD/YYYY)',
+				Class : "usdate",
+				ErrorText : "This must be a valid date (MM/DD/YYYY)",
 				Pattern : new RegExp(/^((0?[1-9]|1[012])[\- \/.](0?[1-9]|[12][0-9]|3[01])[\- \/.](19|20)?[0-9]{2})*$/i)
 			},
 			/**
@@ -129,8 +129,8 @@
 			 * Valid string(s): YYYY-MM-DD
 			 */
 			MysqlDate : {
-				Class : 'mysqldate',
-				ErrorText : 'This must be a valid date (YYYY-MM-DD)',
+				Class : "mysqldate",
+				ErrorText : "This must be a valid date (YYYY-MM-DD)",
 				Pattern : new RegExp(/^((19|20)?[0-9]{2}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01]))*$/i)
 			}
 		},
@@ -147,14 +147,14 @@
 			 *  - data-counter="xxx" : Counter id
 			 */
 			Length : {
-				Class : 'length',
-				MinErrorText : 'The minimum required number of characters is [ALLOWED]',
-				MaxErrorText : 'The maximum allowed number of characters is [ALLOWED]',
-				EqualErrorText : 'The number of characters must be [ALLOWED]',
-				CounterTextMax : '[CURRENT] <= [MAX]',
-				CounterTextMin : '[MIN] <= [CURRENT]',
-				CounterTextMinMax : '[MIN] <= [CURRENT] <= [MAX]',
-				CounterTextEqual : '[CURRENT] == [EQUAL]'
+				Class : "length",
+				MinErrorText : "The minimum required number of characters is [ALLOWED]",
+				MaxErrorText : "The maximum allowed number of characters is [ALLOWED]",
+				EqualErrorText : "The number of characters must be [ALLOWED]",
+				CounterTextMax : "[CURRENT] <= [MAX]",
+				CounterTextMin : "[MIN] <= [CURRENT]",
+				CounterTextMinMax : "[MIN] <= [CURRENT] <= [MAX]",
+				CounterTextEqual : "[CURRENT] == [EQUAL]"
 			},
 			/**
 			 * Identical
@@ -162,8 +162,8 @@
 			 *  - data-equalto="xxx" : Id of the field you want the current field to be identical to
 			 */
 			Identical : {
-				Class : 'identical',
-				ErrorText : 'These fields must match'
+				Class : "identical",
+				ErrorText : "These fields must match"
 			},
 			/**
 			 * Password strength
@@ -175,8 +175,8 @@
 			 * http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
 			 */
 			PasswordStrength : {
-				Class : 'strength',
-				ErrorText : 'Your password is too weak',
+				Class : "strength",
+				ErrorText : "Your password is too weak",
 				Notifications : [
 					"Very weak",
 					"Weak",
@@ -196,6 +196,7 @@
 		 */
 		settings : {
 			asterix : "*",
+			errorTextElement : "p",
 
 			checkOnChange : true,
 			scrollToTop : true,
@@ -244,7 +245,7 @@
 			// Add required indicator (check first if user wants it)
 			if (this.settings.asterix !== "" && !$(this.form).hasClass("noAsterix")) {
 				$(this.form).find("input.required, select.required, textarea.required").each(function () {
-					$(this).parent(':first').append('<span class="req">' + $.SimpleFormChecker.settings.asterix + '</span>');
+					$(this).parent(":first").append("<span class=\"req\">" + $.SimpleFormChecker.settings.asterix + "</span>");
 				});
 			}
 
@@ -325,7 +326,7 @@
 			if (this.error) {
 				// Animate to top?
 				if (this.settings.scrollToTop) {
-					$('html, body').animate({scrollTop: this.firstErrorField.offset().top}, this.settings.scrollTime);
+					$("html, body").animate({scrollTop: this.firstErrorField.offset().top}, this.settings.scrollTime);
 				}
 				// Focus on the first error field
 				if (this.firstErrorField !== null) {
@@ -333,7 +334,7 @@
 				}
 
 				// Message if form is not valid
-				var errorContainer = $(form).data('errmessage');
+				var errorContainer = $(form).data("errmessage");
 				if (typeof errorContainer !== "undefined") {
 					$("#" + errorContainer).text(this.settings.formErrorText);
 				}
@@ -353,7 +354,7 @@
 				error = false;
 
 			// Check on errors
-			if (!error && object.hasClass('required') && object.val() === "") {
+			if (!error && object.hasClass("required") && object.val() === "") {
 				error = this.addError(object, this.settings.emptyErrorText);
 			} else if (!error && this.validateFieldLength(object)) {
 				error = true;
@@ -394,8 +395,8 @@
 			var score = 0,
 				error = false,
 				value = $(object).val(),
-				descContainer = $("#" + $(object).data('desc')),
-				minStrength = $(object).data('minstrength');
+				descContainer = $("#" + $(object).data("desc")),
+				minStrength = $(object).data("minstrength");
 
 			updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
 
@@ -405,9 +406,7 @@
 			}
 
 			// Password has both lower- and uppercase characters
-			if (value.match(/[a-z]/)
-					&& value.match(/[A-Z]/)
-					) {
+			if (value.match(/[a-z]/) && value.match(/[A-Z]/)) {
 				score += 1;
 			}
 
@@ -452,7 +451,7 @@
 		validateIdentical : function (object) {
 			var equalToField,
 				error = false,
-				equalTo = $(object).data('equalto');
+				equalTo = $(object).data("equalto");
 
 			if (typeof equalTo !== "undefined") {
 				equalToField = $("#" + equalTo);
@@ -482,8 +481,8 @@
 			var error = false,
 				counterText = "",
 				checkWhat = "",
-				maxChars = $(object).data('max'),
-				minChars = $(object).data('min');
+				maxChars = $(object).data("max"),
+				minChars = $(object).data("min");
 
 			if (object.hasClass(this.otherChecks.Length.Class) && (object.attr("type") === "text" || object.attr("type") === "password")) {
 				// Check what the user wants
@@ -507,11 +506,11 @@
 
 				// Check error
 				if (!error && (checkWhat === "maxchars" || checkWhat === "bothchars") && object.val().length > maxChars) { // Above maxChars
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MaxErrorText.replace('[ALLOWED]', maxChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MaxErrorText.replace("[ALLOWED]", maxChars)) : true;
 				} else if (!error && (checkWhat === "minchars" || checkWhat === "bothchars") && object.val().length < minChars) { // Under minChars
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MinErrorText.replace('[ALLOWED]', minChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MinErrorText.replace("[ALLOWED]", minChars)) : true;
 				} else if (!error && checkWhat === "equalchars" && object.val().length !== maxChars) { // Not equal to
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.EqualErrorText.replace('[ALLOWED]', maxChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.EqualErrorText.replace("[ALLOWED]", maxChars)) : true;
 				}
 
 				// Update and show the counter
@@ -538,24 +537,24 @@
 		 */
 		updateCounter : function (object, counterText, max, min, error) {
 			// We check the id
-			var counter = $("#" + $(object).data('counter'));
+			var counter = $("#" + $(object).data("counter"));
 
 			// Check if there's a counter container on the page.
 			if (counter.length === 1) {
-				min = (typeof min === "undefined") ? '' : min;
-				max = (typeof max === "undefined") ? '' : max;
+				min = (typeof min === "undefined") ? "" : min;
+				max = (typeof max === "undefined") ? "" : max;
 				$(counter).text(
 					counterText
-						.replace('[MIN]', min)
-						.replace('[CURRENT]', $(object).val().length)
-						.replace('[MAX]', max)
-						.replace('[EQUAL]', max)
+						.replace("[MIN]", min)
+						.replace("[CURRENT]", $(object).val().length)
+						.replace("[MAX]", max)
+						.replace("[EQUAL]", max)
 				);
 
 				if (error) {
-					$(counter).addClass('error');
+					$(counter).addClass("error");
 				} else {
-					$(counter).removeClass('error');
+					$(counter).removeClass("error");
 				}
 			}
 		},
@@ -576,17 +575,17 @@
 			// Add explaining error text
 			if (this.settings.showErrorText && text !== null) {
 				// Check if an error is already there
-				if (object.parent(':first').children("p.errorText").length === 0) {
+				if (object.parent(":first").children(this.settings.errorTextElement + ".errorText").length === 0) {
 					// If not, add a new p.errorText to it.
-					var fieldErrorText = '<p class="errorText">' + text + '</p>';
+					var fieldErrorText = "<" + this.settings.errorTextElement + " class="errorText">" + text + "</" + this.settings.errorTextElement + ">";
 					$(fieldErrorText)
 						.hide()
-						.appendTo(object.parent(':first'))
+						.appendTo(object.parent(":first"))
 						.slideDown(this.settings.animationTime);
 				} else {
 					// If it's there, just change the text to a new one.
-					object.parent(':first')
-						.children("p.errorText")
+					object.parent(":first")
+						.children(this.settings.errorTextElement + ".errorText")
 						.text(text);
 				}
 			}
@@ -605,8 +604,8 @@
 			// Reset field
 			object.removeClass("error");
 			// Remove the text
-			object.parent(':first')
-				.children("p.errorText")
+			object.parent(":first")
+				.children(this.settings.errorTextElement + ".errorText")
 				.slideUp(this.settings.animationTime)
 				.queue(function () {
 					$(this).remove();
