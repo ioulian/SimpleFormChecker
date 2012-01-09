@@ -1,62 +1,62 @@
 SimpleFormChecker is a plugin for jquery that make the validation of forms easier.
 See full description at: http://alexju.be/archive/sfc/
 
-SimpleFormChecker is well documented script so you don't need much information to make it work.
+SimpleFormChecker is well documented script so you don't need much information to make it work.    
 I will explain some settings and options here:
 
 
-+- PARAMETERS -------+------------+---------------------------------------------------------------+
-|                    |            |                                                               |
-|  Parameter         |  Default   |  Description                                                  |
-|                    |            |                                                               |
-+--------------------+------------+---------------------------------------------------------------+
-|  asterix           |  "*"       |  Asterix is shown near a field that is required               |
-+--------------------+------------+---------------------------------------------------------------+
-|  errorTextElement  |  "p"       |  Element that error text will have                            |
-+--------------------+------------+---------------------------------------------------------------+
-|  checkOnChange     |  true      |  Validate field if it's changed                               |
-+--------------------+------------+---------------------------------------------------------------+
-|  scrollToTop       |  true      |  Scroll to the first error field                              |
-+--------------------+------------+---------------------------------------------------------------+
-|  showErrorText     |  true      |  Show error text under the field                              |
-+--------------------+------------+---------------------------------------------------------------+
-|  animationTime     |  250       |  Animation time                                               |
-+--------------------+------------+---------------------------------------------------------------+
-|  scrollTime        |  500       |  Animation time while scrolling to top                        |
-+--------------------+------------+---------------------------------------------------------------+
-|  emptyErrorText    |  "string"  |  Error text that is shown for a required field                |
-+--------------------+------------+---------------------------------------------------------------+
-|  formErrorText     |  "string"  |  This text will be shown if a form is invalid                 |
-|                    |            |  (use with data-errmessage="xxx" on the form)                 |
-+--------------------+------------+---------------------------------------------------------------+
-|  formErrorText     |  "string"  |  This text will be shown if a form is invalid                 |
-+--------------------+------------+---------------------------------------------------------------+
-|  errorText.OBJECT  |  "string"  |  Error messages for Regex-validators                          |
-+--------------------+------------+---------------------------------------------------------------+
++- PARAMETERS -------+------------+---------------------------------------------------------+
+|                    |            |                                                         |
+|  Parameter         |  Default   |  Description                                            |
+|                    |            |                                                         |
++--------------------+------------+---------------------------------------------------------+
+|  asterix           |  "*"       |  Asterix is shown near a field that is required         |
++--------------------+------------+---------------------------------------------------------+
+|  errorTextElement  |  "p"       |  Element that error text will have                      |
++--------------------+------------+---------------------------------------------------------+
+|  checkOnChange     |  true      |  Validate field if it's changed                         |
++--------------------+------------+---------------------------------------------------------+
+|  scrollToTop       |  true      |  Scroll to the first error field                        |
++--------------------+------------+---------------------------------------------------------+
+|  showErrorText     |  true      |  Show error text under the field                        |
++--------------------+------------+---------------------------------------------------------+
+|  animationTime     |  250       |  Animation time                                         |
++--------------------+------------+---------------------------------------------------------+
+|  scrollTime        |  500       |  Animation time while scrolling to top                  |
++--------------------+------------+---------------------------------------------------------+
+|  emptyErrorText    |  "string"  |  Error text that is shown for a required field          |
++--------------------+------------+---------------------------------------------------------+
+|  formErrorText     |  "string"  |  This text will be shown if a form is invalid           |
+|                    |            |  (use with data-errmessage="xxx" on the form)           |
++--------------------+------------+---------------------------------------------------------+
+|  formErrorText     |  "string"  |  This text will be shown if a form is invalid           |
++--------------------+------------+---------------------------------------------------------+
+|  errorText.OBJECT  |  "string"  |  Error messages for Regex-validators                    |
++--------------------+------------+---------------------------------------------------------+
 
 
 You can find all the information on various validators in the source, just check them there ;)
 
 
-+- CHANGELOG --------------+----------------------------------------------------------------------+
-|           |              |                                                                      |
-|  Version  |  Date        |  Description                                                         |
-|           |              |                                                                      |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.0    |  2011-11-08  |  Initial release                                                     |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.1    |  2011-11-14  |  The checks are now objects.                                         |
-|           |              |  You can easely add more if you want.                                |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.2    |  2011-11-16  |  Added length validator.                                             |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.3    |  2011-12-02  |  Now you can check optional fields with regex on match.              |
-|           |              |  No error will be given if it's empty.                               |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.4    |  2011-12-15  |  Added a new check and finalized length validation.                  |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.5    |  2011-12-16  |  New check and optimizations.                                        |
-+-----------+--------------+----------------------------------------------------------------------+
-|  0.1.6    |  2011-12-29  |  Global error text for the form added.                               |
-|           |  2012-01-08  |  Added to GIT                                                        |
-+-----------+--------------+----------------------------------------------------------------------+
++- CHANGELOG --------------+----------------------------------------------------------------+
+|           |              |                                                                |
+|  Version  |  Date        |  Description                                                   |
+|           |              |                                                                |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.0    |  2011-11-08  |  Initial release                                               |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.1    |  2011-11-14  |  The checks are now objects.                                   |
+|           |              |  You can easely add more if you want.                          |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.2    |  2011-11-16  |  Added length validator.                                       |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.3    |  2011-12-02  |  Now you can check optional fields with regex on match.        |
+|           |              |  No error will be given if it's empty.                         |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.4    |  2011-12-15  |  Added a new check and finalized length validation.            |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.5    |  2011-12-16  |  New check and optimizations.                                  |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.6    |  2011-12-29  |  Global error text for the form added.                         |
+|           |  2012-01-08  |  Added to GIT                                                  |
++-----------+--------------+----------------------------------------------------------------+
