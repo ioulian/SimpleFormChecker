@@ -5,14 +5,14 @@ SimpleFormChecker is well documented script so you don't need much information t
 I will explain some settings and options here:
 
 
-+- PARAMETERS -------+------------+---------------------------------------------------------+
++-|PARAMETERS|-------+------------+---------------------------------------------------------+
 |                    |            |                                                         |
 |  Parameter         |  Default   |  Description                                            |
 |                    |            |                                                         |
 +--------------------+------------+---------------------------------------------------------+
-|  asterix           |  "*"       |  Asterix is shown near a field that is required         |
+|  asterix           |  "string"  |  Asterix is shown near a field that is required         |
 +--------------------+------------+---------------------------------------------------------+
-|  errorTextElement  |  "p"       |  Element that error text will have                      |
+|  errorMessage      |  "string"  |  Error-message-element                                  |
 +--------------------+------------+---------------------------------------------------------+
 |  checkOnChange     |  true      |  Validate field if it's changed                         |
 +--------------------+------------+---------------------------------------------------------+
@@ -38,7 +38,7 @@ I will explain some settings and options here:
 You can find all the information on various validators in the source, just check them there ;)
 
 
-+- CHANGELOG --------------+----------------------------------------------------------------+
++-|CHANGELOG|--------------+----------------------------------------------------------------+
 |           |              |                                                                |
 |  Version  |  Date        |  Description                                                   |
 |           |              |                                                                |
@@ -59,4 +59,7 @@ You can find all the information on various validators in the source, just check
 +-----------+--------------+----------------------------------------------------------------+
 |  0.1.6    |  2011-12-29  |  Global error text for the form added.                         |
 |           |  2012-01-08  |  Added to GIT                                                  |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.7    |  2012-01-09  |  Added more consistency across the code                        |
+|           |              |  Added ability to define error-message-element yourself        |
 +-----------+--------------+----------------------------------------------------------------+

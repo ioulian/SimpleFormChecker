@@ -2,7 +2,7 @@
  *	@author Ioulian Alexeev
  *	@date 08.11.2011
  *	@description Fast and versatile form checker script.
- *	@version 0.1.6
+ *	@version 0.1.7
  */
 
 (function ($) {
@@ -148,13 +148,13 @@
 			 */
 			Length : {
 				Class : "length",
-				MinErrorText : "The minimum required number of characters is [ALLOWED]",
-				MaxErrorText : "The maximum allowed number of characters is [ALLOWED]",
-				EqualErrorText : "The number of characters must be [ALLOWED]",
-				CounterTextMax : "[CURRENT] <= [MAX]",
-				CounterTextMin : "[MIN] <= [CURRENT]",
-				CounterTextMinMax : "[MIN] <= [CURRENT] <= [MAX]",
-				CounterTextEqual : "[CURRENT] == [EQUAL]"
+				MinErrorText : "The minimum required number of characters is [[allowed]]",
+				MaxErrorText : "The maximum allowed number of characters is [[allowed]]",
+				EqualErrorText : "The number of characters must be [[allowed]]",
+				CounterTextMax : "[[current]] <= [[max]]",
+				CounterTextMin : "[[current]] >= [min]",
+				CounterTextMinMax : "[min] <= [[current]] <= [max]",
+				CounterTextEqual : "[[current]] == [equal]"
 			},
 			/**
 			 * Identical
@@ -195,8 +195,8 @@
 		 * They are read only by the code
 		 */
 		settings : {
-			asterix : "*",
-			errorTextElement : "p",
+			asterix : "<span class=\"asterix\">*</span>",
+			errorMessage : "<p class=\"errorMessage\">[[text]]</p>",
 
 			checkOnChange : true,
 			scrollToTop : true,
@@ -242,10 +242,10 @@
 		 * - Checks a field length on keyup
 		 */
 		init : function () {
-			// Add required indicator (check first if user wants it)
+			// Add asterixes
 			if (this.settings.asterix !== "" && !$(this.form).hasClass("noAsterix")) {
 				$(this.form).find("input.required, select.required, textarea.required").each(function () {
-					$(this).parent(":first").append("<span class=\"req\">" + $.SimpleFormChecker.settings.asterix + "</span>");
+					$(this).parent(":first").append($.SimpleFormChecker.settings.asterix);
 				});
 			}
 
@@ -506,11 +506,11 @@
 
 				// Check error
 				if (!error && (checkWhat === "maxchars" || checkWhat === "bothchars") && object.val().length > maxChars) { // Above maxChars
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MaxErrorText.replace("[ALLOWED]", maxChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MaxErrorText.replace("[[allowed]]", maxChars)) : true;
 				} else if (!error && (checkWhat === "minchars" || checkWhat === "bothchars") && object.val().length < minChars) { // Under minChars
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MinErrorText.replace("[ALLOWED]", minChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.MinErrorText.replace("[[allowed]]", minChars)) : true;
 				} else if (!error && checkWhat === "equalchars" && object.val().length !== maxChars) { // Not equal to
-					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.EqualErrorText.replace("[ALLOWED]", maxChars)) : true;
+					error = (!updateCounterOnly) ? this.addError(object, this.otherChecks.Length.EqualErrorText.replace("[[allowed]]", maxChars)) : true;
 				}
 
 				// Update and show the counter
@@ -545,10 +545,10 @@
 				max = (typeof max === "undefined") ? "" : max;
 				$(counter).text(
 					counterText
-						.replace("[MIN]", min)
-						.replace("[CURRENT]", $(object).val().length)
-						.replace("[MAX]", max)
-						.replace("[EQUAL]", max)
+						.replace("[[min]]", min)
+						.replace("[[current]]", $(object).val().length)
+						.replace("[[max]]", max)
+						.replace("[[equal]]", max)
 				);
 
 				if (error) {
@@ -567,6 +567,7 @@
 		 * @return bool True
 		 */
 		addError : function (object, text) {
+			var errorMessageElement;
 			// Set the first error-field so we can scroll to it later
 			if (this.settings.scrollToTop && this.firstErrorField === null) {
 				this.firstErrorField = object;
@@ -574,19 +575,25 @@
 
 			// Add explaining error text
 			if (this.settings.showErrorText && text !== null) {
-				// Check if an error is already there
-				if (object.parent(":first").children(this.settings.errorTextElement + ".errorText").length === 0) {
-					// If not, add a new p.errorText to it.
-					var fieldErrorText = "<" + this.settings.errorTextElement + " class=\"errorText\">" + text + "</" + this.settings.errorTextElement + ">";
-					$(fieldErrorText)
-						.hide()
-						.appendTo(object.parent(":first"))
+				// Check if user has defined custom error element
+				errorMessageElement = $("#" + $(object).data("errmessage"));
+				if (errorMessageElement.length === 1) { // User has defined one
+					errorMessageElement.hide()
+						.text(text)
 						.slideDown(this.settings.animationTime);
-				} else {
-					// If it's there, just change the text to a new one.
-					object.parent(":first")
-						.children(this.settings.errorTextElement + ".errorText")
-						.text(text);
+				} else { // Nope, nothing found, create new one
+					errorMessageElement = this.getErrorElement(object);
+					// Check if an error is already there
+					if (errorMessageElement.length === 0) {
+						// If not, add a new p.errorText to it.
+						$(this.settings.errorMessage.replace("[[text]]", text))
+							.hide()
+							.appendTo(object.parent(":first"))
+							.slideDown(this.settings.animationTime);
+					} else {
+						// If it's there, just change the text to a new one.
+						errorMessageElement.text(text);
+					}
 				}
 			}
 
@@ -601,15 +608,35 @@
 		 * @param object Field
 		 */
 		removeError : function (object) {
+			var errorMessageElement;
 			// Reset field
 			object.removeClass("error");
-			// Remove the text
-			object.parent(":first")
-				.children(this.settings.errorTextElement + ".errorText")
-				.slideUp(this.settings.animationTime)
-				.queue(function () {
-					$(this).remove();
-				});
+
+			// Check if user has defined custom error element
+			errorMessageElement = $("#" + $(object).data("errmessage"));
+			if (errorMessageElement.length === 1) { // User has defined one
+				errorMessageElement.slideUp(this.settings.animationTime);
+			} else {
+				// Remove the text
+				this.getErrorElement(object).slideUp(this.settings.animationTime)
+					.queue(function () {
+						$(this).remove();
+					});
+			}
+		},
+
+		/**
+		 * Gets the error element for the given field
+		 *
+		 * @param object Field
+		 * @return object Error element
+		 */
+		getErrorElement : function (object) {
+			return object
+				.parent(":first")
+				.children(
+					$(this.settings.errorMessage)[0].nodeName + "." + $(this.settings.errorMessage).attr("class")
+				);
 		}
 	};
 }(jQuery));

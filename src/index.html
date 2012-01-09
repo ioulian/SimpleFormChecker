@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta name="keywords" content="form, input, checker, validator, easy, simple, fast, jquery, plugin, simpleformchecker">
+	  <title>SimpleFormChecker - Form validation plugin for jQuery</title>
+	  <link rel="stylesheet" media="screen" href="css/default.css" >
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	  <script src="jquery.simpleformchecker.js"></script>
+	  <script src="main.js"></script>
+	</head>
+	<body>
+		<div id="header" class="container">
+			<div class="holder">
+				<h1>SimpleFormChecker</h1>
+				<h3>Easy and versatile form checker script</h3>
+			</div>
+		</div>
+		<div id="body" class="container">
+			<div class="holder clearfix">
+				<div id="content" class="clearfix">
+					<ul id="menu" class="clearfix">
+						<li><a href="#overview">Overview</a></li>
+						<li><a href="#features">Features</a></li>
+						<li><a href="#howto">How to use</a></li>
+						<li><a href="#examples">Examples</a></li>
+						<li><a href="#source">Source</a></li>
+						<li><a href="#support">Support</a></li>
+					</ul>
+					
+					<h2 id="overview">Overview</h2>
+					<p>Simple form checker is a, easy to use, plugin for jquery that allows you to validate forms. The validation is based on the classes you add on the inputs.</p>
+					
+					<h2 id="features">Features</h2>
+					<ul>
+						<li>Lots of predefined validation options</li>
+						<li>Easy to add new validators</li>
+						<li>Lots of parameters to set/tweak</li>
+						<li>Can handle multiple forms on the same page, with different options</li>
+						<li>Made with form usability in mind</li>
+						<li>Styles are added to inputs and errors so you can style them</li>
+					</ul>
+					
+					<h2 id="howto">How to use</h2>
+					<p>First you need to add jQuery and SimpleFormChecker to the page:</p>
+					<pre class="code">
+&lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.simpleformchecker.js&quot;&gt;&lt;/script&gt;
+					</pre>
+					<p>Now you can add the form checker to form(s):</p>
+					<pre class="code">
+$(&quot;form.tocheck&quot;).SimpleFormChecker();
+					</pre>
+					<p>The next step is to add classes to the inputfields:</p>
+					<pre class="code">
+&lt;input type=&quot;text&quot; class=&quot;required email&quot; /&gt;
+					</pre>
+					<p>Now the field must be filled in and it must be a valid email address. It's that easy!</p>
+					
+					<h2 id="examples">Examples</h2>
+					<p>Valid url is needed:</p>
+					<pre class="code">
+&lt;input type=&quot;text&quot; class=&quot;required url&quot; /&gt;
+					</pre>
+					<form class="example" method="post" action="javascript:alert('Form validated!');">
+						<table>
+							<tr>
+								<td>
+									<input type="text" name="q1" id="q1" data-errmessage="errorurl" class="required url" />
+								</td>
+								<td><p id="errorurl"></p></td>
+							</tr>
+							<tr>
+								<td>
+									<input type="submit" value="Validate" />
+								</td>
+							</tr>
+						</table>
+					</form>
+					
+					<p>Numbers only and size must be over 5 characters long</p>
+					<pre class="code">
+&lt;input type=&quot;text&quot; data-min=&quot;5&quot; data-counter=&quot;counter&quot; class=&quot;number length&quot; /&gt;
+					</pre>
+					<form class="example" method="post" action="javascript:alert('Form validated!');">
+						<table>
+							<tr>
+								<td>
+									<input type="text" name="q2" id="q2" data-min="5" data-counter="counter" class="number length" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="submit" value="Validate" />
+									<p id="counter"><p>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<p>And this is how you pass parameters:</p>
+					<pre class="code">
+$(&quot;#foo&quot;).SimpleFormChecker({<br/>    scrollToTop : false,<br/>    asterix: &quot;&lt;img src=\&quot;/path/to/image.png\&quot; alt=\&quot;\&quot; title=\&quot;required\&quot; /&gt;&quot;,<br/>    emptyErrorText : 'This field is required',<br/>    errorText : {<br/>        Email : 'This is not a valid email address.'<br/>    }<br/>});
+					</pre>
+					<p>(Don't forget to escape HTML)</p>
+					
+					<h2 id="source">Source</h2>
+					<p>You can find the source code on <a href="https://github.com/ioulian/SimpleFormChecker" target="_blank">Github</a>. There you can also find the changelog and more explanation about the code itself.</p>
+					<p>The source is well documented so don't hesitate to read it and understand. You can then easely add new validators.</p>
+					<p>Licensed under both <a href="http://jquery.org/license/" target="_blank">MIT and GPL licenses</a>. Also, if you are using this plugin, just drop me an <a href="mailto:ioulian@alexju.be">email</a>, I would like to know where the plugin is being used ;)</p>
+					<p>If you are satisfied with this plugin, you can always buy me a cup of coffee.</p>
+					<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+					<input type="hidden" name="cmd" value="_s-xclick">
+					<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHNwYJKoZIhvcNAQcEoIIHKDCCByQCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYC6V5kg0WadlufJGuBBI8XR4IJxTB7Vq4EQD2wtYu+BgfKaPlC9lCl8EeXGktvD9O0Smjjld7hHSK4zPzCE11LOrNBL+iMUa2riikmKxpkX5mVvaaxCofyb5c7Z/FkV/MBk6yeASRID+JC4exaeWpxtmlaLtc5ch83ZKfhHGTkKBjELMAkGBSsOAwIaBQAwgbQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIHAu9h547LR+AgZB9Maxyz5ILPYHX7Q7VrQmoXvArnqesyleOFF9XlBjPQ0Q4a/md1KzXHqEoIxDCjB1q+lynFAmsMT853KoTprFkzxR4fIY7wVZ3cfgOtBqxU3ytgo/BuZegfPyxgXZqjmYT/u+0c29l01Cm3IRpVvXSBanRJ9+at5EzVC9iaovCDXHstTCXxaf49hh83cQqYMSgggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xMjAxMDgxODMxMTJaMCMGCSqGSIb3DQEJBDEWBBTJj6jHJwxZ7D5/hwhuNs9VDQE4pDANBgkqhkiG9w0BAQEFAASBgK6jmnNsjrGkqqhVidBhHsVtz95AwyllVYq4zHrufE11VQA3ah+eH4CRu53FamneZm7uwKnjSn2BBhCPJ8thKurRZE0FEatxTMOQCZ9MZpl2cRfJSKeHcoMh3DVtem9Lky6a8KdgvDKzPq3huERgeOCrdyY7BLxiwUpsDKwNsVAN-----END PKCS7-----
+					">
+					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+					<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+					</form>
+					
+					<h2 id="support">Support</h2>
+					<p>Any questions regarding bugs, requests and the source code itself should be asked on <a href="https://github.com/ioulian/SimpleFormChecker" target="_blank">Github</a>. Note: I will try to reply to all mails, but I can't promise anything</p>
+					<p class="footer">
+					&copy; 2012 - <a href="mailto:ioulian@alexju.be">Ioulian Alexeev</a> - <a href="http//www.alexju.be">alexju.be</a>
+					</p>
+				</div>
+				<div id="side">
+					<a href="https://github.com/ioulian/SimpleFormChecker" class="download-btn" target="_blank">Download<span>(v.: 0.1.6)</span></a>
+					
+					<h2>Current validators</h2>
+					<p>These are current validators: <br />
+					<span class="small">Name (<em>class</em>)</span></p>
+					<ul class="sideul">
+						<li>
+							<h3>Regex:</h3>
+							<ul>
+								<li>Email (<em>email</em>)</li>
+								<li>Url (<em>url</em>)</li>
+								<li>IP (<em>ip</em>)</li>
+								<li>Number (<em>number</em>)</li>
+								<li>Characters (<em>characters</em>)</li>
+								<li>Day (<em>day</em>)</li>
+								<li>Month (<em>month</em>)</li>
+								<li>Year (<em>year</em>)</li>
+								<li>Date (<em>date</em>)</li>
+								<li>Us Date (<em>usdate</em>)</li>
+								<li>MySQL date (<em>mysqldate</em>)</li>
+							</ul>
+						</li>
+						<li>
+							<h3>Other:</h3>
+							<ul>
+								<li>Length (<em>length</em>)<br />
+								Used width:
+									<ul>
+										<li>data-min="###"</li>
+										<li>data-max="###"</li>
+										<li>data-counter="xxx"</li>
+									</ul>
+								</li>
+								<li>Identical (<em>identical</em>)<br />
+								Used width:
+									<ul>
+										<li>data-equalto="xxx"</li>
+									</ul>
+								</li>
+								<li>Password Strength (<em>strength</em>)<br />
+								Used width:
+									<ul>
+										<li>data-desc="xxx"</li>
+										<li>data-minstrength="###"</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					
+					<h2>Current Parameters</h2>
+					<p>You can pass these parameters:<br />
+					<span class="small">Name (<em>default</em>)</span></p>
+					
+					<ul class="sideul">
+						<li>
+							<ul>
+								<li>asterix (<em>"*"</em>)</li>
+								<li>errorTextElement (<em>"p"</em>)</li>
+								<li>checkOnChange (<em>true</em>)</li>
+								<li>scrollToTop (<em>true</em>)</li>
+								<li>showErrorText (<em>true</em>)</li>
+								<li>animationTime (<em>250</em>)</li>
+								<li>scrollTime (<em>500</em>)</li>
+								<li>emptyErrorText (<em>"string"</em>)</li>
+								<li>formErrorText (<em>"string"</em>)</li>
+							</ul>
+						</li>
+					</ul>
+					
+					<h2>External examples:</h2>
+					<p>Here are some links to sites that use this plugin:</p>
+					<ul class="sideul">
+						<li>
+							<ul>
+								<li><a href="http://www.ikgaervoor.be/nl/inleefmomenten" target="_blank">ikgaervoor.be</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="footer" class="container">
+			<div class="holder">
+			</div>
+		</div>
+	</body>
+</html>
