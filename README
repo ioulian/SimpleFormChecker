@@ -5,34 +5,35 @@ SimpleFormChecker is well documented script so you don't need much information t
 I will explain some settings and options here:
 
 
-+-|PARAMETERS|-------+------------+---------------------------------------------------------+
-|                    |            |                                                         |
-|  Parameter         |  Default   |  Description                                            |
-|                    |            |                                                         |
-+--------------------+------------+---------------------------------------------------------+
-|  asterix           |  "string"  |  Asterix is shown near a field that is required         |
-+--------------------+------------+---------------------------------------------------------+
-|  errorMessage      |  "string"  |  Error-message-element                                  |
-+--------------------+------------+---------------------------------------------------------+
-|  checkOnChange     |  true      |  Validate field if it's changed                         |
-+--------------------+------------+---------------------------------------------------------+
-|  scrollToTop       |  true      |  Scroll to the first error field                        |
-+--------------------+------------+---------------------------------------------------------+
-|  showErrorText     |  true      |  Show error text under the field                        |
-+--------------------+------------+---------------------------------------------------------+
-|  animationTime     |  250       |  Animation time                                         |
-+--------------------+------------+---------------------------------------------------------+
-|  scrollTime        |  500       |  Animation time while scrolling to top                  |
-+--------------------+------------+---------------------------------------------------------+
-|  emptyErrorText    |  "string"  |  Error text that is shown for a required field          |
-+--------------------+------------+---------------------------------------------------------+
-|  formErrorText     |  "string"  |  This text will be shown if a form is invalid           |
-|                    |            |  (use with data-errmessage="xxx" on the form)           |
-+--------------------+------------+---------------------------------------------------------+
-|  formErrorText     |  "string"  |  This text will be shown if a form is invalid           |
-+--------------------+------------+---------------------------------------------------------+
-|  errorText.OBJECT  |  "string"  |  Error messages for Regex-validators                    |
-+--------------------+------------+---------------------------------------------------------+
++-|PARAMETERS|---------+------------+-------------------------------------------------------+
+|                      |            |                                                       |
+|  Parameter           |  Default   |  Description                                          |
+|                      |            |                                                       |
++----------------------+------------+-------------------------------------------------------+
+|  asterix             |  "string"  |  Asterix is shown near a field that is required       |
++----------------------+------------+-------------------------------------------------------+
+|  errorMessage        |  "string"  |  Error-message-element                                |
++----------------------+------------+-------------------------------------------------------+
+|  requiredClass       |  "string"  |  Class for required fields                            |
++----------------------+------------+-------------------------------------------------------+
+|  checkOnChange       |  true      |  Validate field if it's changed                       |
++----------------------+------------+-------------------------------------------------------+
+|  updateOnType        |  true      |  Update some fields on key up                         |
++----------------------+------------+-------------------------------------------------------+
+|  scrollToErrorField  |  true      |  Scroll to the first error field                      |
++----------------------+------------+-------------------------------------------------------+
+|  animationTime       |  250       |  Animation time                                       |
++----------------------+------------+-------------------------------------------------------+
+|  scrollTime          |  500       |  Animation time while scrolling to top                |
++----------------------+------------+-------------------------------------------------------+
+|  emptyErrorText      |  "string"  |  Error text that is shown for a required field        |
++----------------------+------------+-------------------------------------------------------+
+|  formErrorText       |  "string"  |  This text will be shown if a form is invalid         |
+|                      |            |  (use with data-errmessage="xxx" on the form)         |
++----------------------+------------+-------------------------------------------------------+
+|  errorText.OBJECT    |  "string"  |  Error messages for Regex-validators                  |
+|                      |            |  Now also for custom checks                           |
++----------------------+------------+-------------------------------------------------------+
 
 
 You can find all the information on various validators in the source, just check them there ;)
@@ -62,4 +63,9 @@ You can find all the information on various validators in the source, just check
 +-----------+--------------+----------------------------------------------------------------+
 |  0.1.7    |  2012-01-09  |  Added more consistency across the code                        |
 |           |              |  Added ability to define error-message-element yourself        |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.8    |  2012-01-12  |  After some days of work, I have finally rewritten the class.  |
+|           |              |  Multiple forms on the page now can have different settings.   |
+|           |              |  Some settings were deleted as showAsterix or showError, now   |
+|           |              |  you can just pass an empty string and it won't show anything. |
 +-----------+--------------+----------------------------------------------------------------+
