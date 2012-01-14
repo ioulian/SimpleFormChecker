@@ -68,4 +68,5 @@ You can find all the information on various validators in the source, just check
 |           |              |  Multiple forms on the page now can have different settings.   |
 |           |              |  Some settings were deleted as showAsterix or showError, now   |
 |           |              |  you can just pass an empty string and it won't show anything. |
+|           |  2012-01-14  |  Fixed some text replacements.                                 |
 +-----------+--------------+----------------------------------------------------------------+

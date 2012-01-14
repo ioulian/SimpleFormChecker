@@ -139,9 +139,9 @@ function Sfc() {
 				MaxErrorText : "The maximum allowed number of characters is [[allowed]]",
 				EqualErrorText : "The number of characters must be [[allowed]]",
 				CounterTextMax : "[[current]] <= [[max]]",
-				CounterTextMin : "[[current]] >= [min]",
-				CounterTextMinMax : "[min] <= [[current]] <= [max]",
-				CounterTextEqual : "[[current]] == [equal]"
+				CounterTextMin : "[[current]] >= [[min]]",
+				CounterTextMinMax : "[[min]] <= [[current]] <= [[max]]",
+				CounterTextEqual : "[[current]] == [[equal]]"
 			},
 			/**
 			 * Identical
