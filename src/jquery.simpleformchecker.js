@@ -1,4 +1,4 @@
-/**
+/*!
  *	@author Ioulian Alexeev
  *	@date 08.11.2011
  *	@description Fast and versatile form checker script.
@@ -12,109 +12,109 @@ function Sfc() {
 	"use strict";
 
 	/**
-	 * Regex checks
-	 *
-	 * To add a new check, just duplicate any of these objects and change the values
-	 * Don't forget about the comma ;)
-	 */
+	* Regex checks
+	*
+	* To add a new check, just duplicate any of these objects and change the values
+	* Don't forget about the comma ;)
+	*/
 	var regexChecks = {
 			/**
-			 * Checks for email adresses. This validates most of the email adresses
-			 */
+			* Checks for email adresses. This validates most of the email adresses
+			*/
 			Email : {
 				Class : "email",
 				ErrorText : "This must be a valid email address",
 				Pattern : new RegExp(/^(("[\w-\s]+")|([\w\-]+(?:\.[\w\-]+)*)|("[\w\-\s]+")([\w\-]+(?:\.[\w\-]+)*))(@((?:[\w\-]+\.)*\w[\w\-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
 			},
 			/**
-			 * Checks for url
-			 */
+			* Checks for url
+			*/
 			Url : {
 				Class : "url",
 				ErrorText : "This must be a valid url",
 				Pattern : new RegExp(/(^|\s)((https?:\/\/)?[\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?)/i)
 			},
 			/**
-			 * Checks for IPv4
-			 *
-			 * Valid string(s): ###.###.###.###
-			 */
+			* Checks for IPv4
+			*
+			* Valid string(s): ###.###.###.###
+			*/
 			Ip : {
 				Class : "ip",
 				ErrorText : "This must be a valid IP number",
 				Pattern : new RegExp(/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/i)
 			},
 			/**
-			 * Only numbers are allowed
-			 */
+			* Only numbers are allowed
+			*/
 			Number : {
 				Class : "number",
 				ErrorText : "This must contain only numbers",
 				Pattern : new RegExp(/^[0-9]*$/i)
 			},
 			/**
-			 * Only characters are allowed
-			 */
+			* Only characters are allowed
+			*/
 			Characters : {
 				Class : "characters",
 				ErrorText : "This must contain only characters",
 				Pattern : new RegExp(/^[a-zA-Z]*$/i)
 			},
 			/**
-			 * Checks for day
-			 *
-			 * Valid string(s): 01-31
-			 */
+			* Checks for day
+			*
+			* Valid string(s): 01-31
+			*/
 			Day : {
 				Class : "day",
 				ErrorText : "This must be a valid day",
 				Pattern : new RegExp(/^([1-9]|[1-2][0-9]|3[01])$/i)
 			},
 			/**
-			 * Checks for month
-			 *
-			 * Valid string(s): 01-31
-			 */
+			* Checks for month
+			*
+			* Valid string(s): 01-31
+			*/
 			Month : {
 				Class : "month",
 				ErrorText : "This must be a valid month",
 				Pattern : new RegExp(/^(([0]{0,1}[1-9])|(1[0-2]))$/i)
 			},
 			/**
-			 * Checks for year
-			 *
-			 * Valid string(s): 1900 - 2099
-			 */
+			* Checks for year
+			*
+			* Valid string(s): 1900 - 2099
+			*/
 			Year : {
 				Class : "year",
 				ErrorText : "This must be a valid year",
 				Pattern : new RegExp(/^(19|20)\d\d$/i)
 			},
 			/**
-			 * Checks for normal date
-			 * 
-			 * Valid string(s): DD MM YYYY || DD-MM-YYYY || DD/MM/YYYY || DD.MM.YYYY
-			 */
+			* Checks for normal date
+			* 
+			* Valid string(s): DD MM YYYY || DD-MM-YYYY || DD/MM/YYYY || DD.MM.YYYY
+			*/
 			Date : {
 				Class : "date",
 				ErrorText : "This must be a valid date (DD/MM/YYYY)",
 				Pattern : new RegExp(/^((0?[1-9]|[12][0-9]|3[01])[\- \/.](0?[1-9]|1[012])[\- \/.](19|20)?[0-9]{2})*$/i)
 			},
 			/**
-			 * Checks for US formatted date
-			 * 
-			 * Valid string(s): MM DD YYYY || MM-DD-YYYY || MM/DD/YYYY || MM.DD.YYYY
-			 */
+			* Checks for US formatted date
+			* 
+			* Valid string(s): MM DD YYYY || MM-DD-YYYY || MM/DD/YYYY || MM.DD.YYYY
+			*/
 			UsDate : {
 				Class : "usdate",
 				ErrorText : "This must be a valid date (MM/DD/YYYY)",
 				Pattern : new RegExp(/^((0?[1-9]|1[012])[\- \/.](0?[1-9]|[12][0-9]|3[01])[\- \/.](19|20)?[0-9]{2})*$/i)
 			},
 			/**
-			 * Checks for date formatted for database
-			 *
-			 * Valid string(s): YYYY-MM-DD
-			 */
+			* Checks for date formatted for database
+			*
+			* Valid string(s): YYYY-MM-DD
+			*/
 			MysqlDate : {
 				Class : "mysqldate",
 				ErrorText : "This must be a valid date (YYYY-MM-DD)",
@@ -123,16 +123,16 @@ function Sfc() {
 		},
 
 		/**
-		 * Other checks : holder for custom checks
-		 */
+		* Other checks : holder for custom checks
+		*/
 		otherChecks = {
 			/**
-			 * Use class "length"
-			 * Add these attributes for check options:
-			 *  - data-min="###" : Minimum characters
-			 *  - data-max="###" : Maximum characters
-			 *  - data-counter="xxx" : Counter id
-			 */
+			* Use class "length"
+			* Add these attributes for check options:
+			*  - data-min="###" : Minimum characters
+			*  - data-max="###" : Maximum characters
+			*  - data-counter="xxx" : Counter id
+			*/
 			Length : {
 				Class : "length",
 				MinErrorText : "The minimum required number of characters is [[allowed]]",
@@ -144,23 +144,23 @@ function Sfc() {
 				CounterTextEqual : "[[current]] == [[equal]]"
 			},
 			/**
-			 * Identical
-			 * Add this attribute for check options:
-			 *  - data-equalto="xxx" : Id of the field you want the current field to be identical to
-			 */
+			* Identical
+			* Add this attribute for check options:
+			*  - data-equalto="xxx" : Id of the field you want the current field to be identical to
+			*/
 			Identical : {
 				Class : "identical",
 				ErrorText : "These fields must match"
 			},
 			/**
-			 * Password strength
-			 * Add this attribute for check options:
-			 *  - data-desc="xxx" : Id of the element where to display the strength
-			 *  - data-minstrength="###" : Minimum strength to pass 0 - Max notifications
-			 * 
-			 * See:
-			 * http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
-			 */
+			* Password strength
+			* Add this attribute for check options:
+			*  - data-desc="xxx" : Id of the element where to display the strength
+			*  - data-minstrength="###" : Minimum strength to pass 0 - Max notifications
+			* 
+			* See:
+			* http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
+			*/
 			PasswordStrength : {
 				Class : "strength",
 				ErrorText : "Your password is too weak",
@@ -176,11 +176,11 @@ function Sfc() {
 		},
 
 		/**
-		 * Default options
-		 *
-		 * You can set these options by passing params.
-		 * They are read only by the code
-		 */
+		* Default options
+		*
+		* You can set these options by passing params.
+		* They are read only by the code
+		*/
 		settings = {
 			// Asterix that is shown for required fields
 			// You can leave this empty if you don't want asterixes to be shown
@@ -212,10 +212,10 @@ function Sfc() {
 		},
 
 		/**
-		 * Variables
-		 *
-		 * These variables are used by the code
-		 */
+		* Variables
+		*
+		* These variables are used by the code
+		*/
 		self = this,
 		errorField = null,
 		form = null,
@@ -227,14 +227,15 @@ function Sfc() {
 		];
 
 	/**
-	 * Pre-init
-	 * Sets the options, form and inits the logic.
-	 *
-	 * @param object Form to validate
-	 * @param object Options-object
-	 */
+	* Pre-init
+	* Sets the options, form and inits the logic.
+	*
+	* @param object Form to validate
+	* @param object Options-object
+	*/
 	Sfc.prototype.construct = function (f, options) {
 		form = f;
+		self = this;
 		// Set options
 		self.handleOptions(options);
 		// Init logic
@@ -242,13 +243,13 @@ function Sfc() {
 	};
 
 	/**
-	 * Initialise
-	 * 
-	 * - Add asterix on the fields where it is needed
-	 * - Set the form to validate on a field change
-	 * - Validate the form on submit
-	 * - Checks a field length on keyup
-	 */
+	* Initialise
+	* 
+	* - Add asterix on the fields where it is needed
+	* - Set the form to validate on a field change
+	* - Validate the form on submit
+	* - Checks a field length on keyup
+	*/
 	this.init = function () {
 		var i,
 			inputCount = inputs.length;
@@ -302,33 +303,33 @@ function Sfc() {
 	};
 
 	/**
-	 * Sets the options
-	 *
-	 * @param Options-object
-	 */
+	* Sets the options
+	*
+	* @param Options-object
+	*/
 	this.handleOptions = function (options) {
 		// Loop for normal settings
 		var param,
 			check;
 
-		if (options !== null) {
+		if (typeof options !== "undefined") {
 			for (param in options) {
-				if (settings[param] !== null) {
+				if (typeof settings[param] !== "undefined") {
 					settings[param] = options[param];
 				}
 			}
 		}
 
 		// Loop for regexes
-		if (options.errorText !== null) {
+		if (typeof options.errorText !== "undefined") {
 			for (check in options.errorText) {
-				if (regexChecks[check] !== null) {
+				if (typeof regexChecks[check] !== "undefined") {
 					regexChecks[check].ErrorText = options.errorText[check];
 				}
 			}
 
 			for (check in options.errorText) {
-				if (otherChecks[check] !== null) {
+				if (typeof otherChecks[check] !== "undefined") {
 					otherChecks[check].ErrorText = options.errorText[check];
 				}
 			}
@@ -336,11 +337,11 @@ function Sfc() {
 	};
 
 	/**
-	 * Checks the form
-	 *
-	 * @param object Form that's need to be checked
-	 * @return bool Form valid?
-	 */
+	* Checks the form
+	*
+	* @param object Form that's need to be checked
+	* @return bool Form valid?
+	*/
 	this.checkForm = function () {
 		var i,
 			errorContainer,
@@ -384,10 +385,10 @@ function Sfc() {
 	};
 
 	/**
-	 * Checks current field on added classes and validates the field based on them
-	 *
-	 * @param object Field to check
-	 */
+	* Checks current field on added classes and validates the field based on them
+	*
+	* @param object Field to check
+	*/
 	this.checkField = function (object) {
 		var check,
 			err = false;
@@ -405,7 +406,7 @@ function Sfc() {
 
 		// Do regex checks on it
 		if (!err) { // No need to check if the field is already invalid
-			if (regexChecks !== null) {
+			if (typeof regexChecks !== "undefined") {
 				for (check in regexChecks) {
 					if (object.hasClass(regexChecks[check].Class)
 							&& !regexChecks[check].Pattern.test(object.val())
@@ -423,13 +424,13 @@ function Sfc() {
 	};
 
 	/**
-	 * Validates password strength
-	 * http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
-	 *
-	 * @param object Field to check
-	 * @param bool Update counter only? It doesn't validate the field while typing because it's annoying
-	 * @return bool Error
-	 */
+	* Validates password strength
+	* http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
+	*
+	* @param object Field to check
+	* @param bool Update counter only? It doesn't validate the field while typing because it's annoying
+	* @return bool Error
+	*/
 	this.checkPasswordStrength = function (object, updateCounterOnly) {
 		var score = 0,
 			err = false,
@@ -482,11 +483,11 @@ function Sfc() {
 	};
 
 	/**
-	 * Validates the field length.
-	 *
-	 * @param object Field to check
-	 * @return bool Error
-	 */
+	* Validates the field length.
+	*
+	* @param object Field to check
+	* @return bool Error
+	*/
 	this.validateIdentical = function (object) {
 		var equalToField,
 			err = false,
@@ -509,12 +510,12 @@ function Sfc() {
 	};
 
 	/**
-	 * Validates the field length.
-	 *
-	 * @param Field to check
-	 * @param Update counter only? It doesn't validate the field while typing because it's annoying
-	 * @return Error
-	 */
+	* Validates the field length.
+	*
+	* @param Field to check
+	* @param Update counter only? It doesn't validate the field while typing because it's annoying
+	* @return Error
+	*/
 	this.validateFieldLength = function (object, updateCounterOnly) {
 		// Set the default to false
 		updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
@@ -567,14 +568,14 @@ function Sfc() {
 	};
 
 	/**
-	 * Updates counter
-	 *
-	 * @param object Field to check
-	 * @param string Text that needs to be displayed
-	 * @param int Max allowed characters
-	 * @param int Min required characters
-	 * @param string Error text
-	 */
+	* Updates counter
+	*
+	* @param object Field to check
+	* @param string Text that needs to be displayed
+	* @param int Max allowed characters
+	* @param int Min required characters
+	* @param string Error text
+	*/
 	this.updateCounter = function (object, counterText, max, min, err) {
 		// We check the id
 		var counter = $("#" + $(object).data("counter"));
@@ -600,12 +601,12 @@ function Sfc() {
 	};
 
 	/**
-	 * Adds an error + adds class "error" on the field
-	 *
-	 * @param object Field
-	 * @param string Error text that will be displayed
-	 * @return bool True
-	 */
+	* Adds an error + adds class "error" on the field
+	*
+	* @param object Field
+	* @param string Error text that will be displayed
+	* @return bool True
+	*/
 	this.addError = function (object, text) {
 		var errorMessageElement;
 
@@ -614,14 +615,16 @@ function Sfc() {
 		}
 
 		// Add explaining error text
-		if (text !== null || text !== "") {
+		if (typeof text !== "undefined" || text !== "") {
 			// Check if user has defined custom error element
 			errorMessageElement = $("#" + $(object).data("errmessage"));
 			if (errorMessageElement.length === 1) { // User has defined one
-				if (errorMessageElement.text() === "") {
+				if (errorMessageElement.html() === "") {
 					errorMessageElement.hide()
-						.text(text)
+						.html(text)
 						.slideDown(settings.animationTime);
+				} else {
+					errorMessageElement.html(text).slideDown(settings.animationTime);
 				}
 			} else { // Nope, nothing found, create new one
 				errorMessageElement = self.getErrorElement(object);
@@ -634,7 +637,7 @@ function Sfc() {
 						.slideDown(settings.animationTime);
 				} else {
 					// If it's there, just change the text to a new one.
-					errorMessageElement.text(text);
+					errorMessageElement.html(text);
 				}
 			}
 		}
@@ -645,10 +648,10 @@ function Sfc() {
 	};
 
 	/**
-	 * Removes error, duh
-	 *
-	 * @param object Field
-	 */
+	* Removes error, duh
+	*
+	* @param object Field
+	*/
 	this.removeError = function (object) {
 		var errorMessageElement;
 
@@ -669,11 +672,11 @@ function Sfc() {
 	};
 
 	/**
-	 * Gets the error element for the given field
-	 *
-	 * @param object Field
-	 * @return object Error element
-	 */
+	* Gets the error element for the given field
+	*
+	* @param object Field
+	* @return object Error element
+	*/
 	this.getErrorElement = function (object) {
 		return object
 			.parent(":first")
