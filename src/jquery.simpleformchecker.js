@@ -2,13 +2,13 @@
  *	@author Ioulian Alexeev
  *	@date 08.11.2011
  *	@description Fast and versatile form checker script.
- *	@version 0.1.8
+ *	@version 0.1.9
  */
 
 /**
  * SimpleFormChecker main class
  */
-function Sfc() {
+function Sfc(form, options, $) {
 	"use strict";
 
 	/**
@@ -17,688 +17,802 @@ function Sfc() {
 	* To add a new check, just duplicate any of these objects and change the values
 	* Don't forget about the comma ;)
 	*/
-	var regexChecks = {
-			/**
-			* Checks for email adresses. This validates most of the email adresses
-			*/
-			Email : {
-				Class : "email",
-				ErrorText : "This must be a valid email address",
-				Pattern : new RegExp(/^(("[\w-\s]+")|([\w\-]+(?:\.[\w\-]+)*)|("[\w\-\s]+")([\w\-]+(?:\.[\w\-]+)*))(@((?:[\w\-]+\.)*\w[\w\-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
-			},
-			/**
-			* Checks for url
-			*/
-			Url : {
-				Class : "url",
-				ErrorText : "This must be a valid url",
-				Pattern : new RegExp(/(^|\s)((https?:\/\/)?[\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?)/i)
-			},
-			/**
-			* Checks for IPv4
-			*
-			* Valid string(s): ###.###.###.###
-			*/
-			Ip : {
-				Class : "ip",
-				ErrorText : "This must be a valid IP number",
-				Pattern : new RegExp(/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/i)
-			},
-			/**
-			* Only numbers are allowed
-			*/
-			Number : {
-				Class : "number",
-				ErrorText : "This must contain only numbers",
-				Pattern : new RegExp(/^[0-9]*$/i)
-			},
-			/**
-			* Only characters are allowed
-			*/
-			Characters : {
-				Class : "characters",
-				ErrorText : "This must contain only characters",
-				Pattern : new RegExp(/^[a-zA-Z]*$/i)
-			},
-			/**
-			* Checks for day
-			*
-			* Valid string(s): 01-31
-			*/
-			Day : {
-				Class : "day",
-				ErrorText : "This must be a valid day",
-				Pattern : new RegExp(/^([1-9]|[1-2][0-9]|3[01])$/i)
-			},
-			/**
-			* Checks for month
-			*
-			* Valid string(s): 01-31
-			*/
-			Month : {
-				Class : "month",
-				ErrorText : "This must be a valid month",
-				Pattern : new RegExp(/^(([0]{0,1}[1-9])|(1[0-2]))$/i)
-			},
-			/**
-			* Checks for year
-			*
-			* Valid string(s): 1900 - 2099
-			*/
-			Year : {
-				Class : "year",
-				ErrorText : "This must be a valid year",
-				Pattern : new RegExp(/^(19|20)\d\d$/i)
-			},
-			/**
-			* Checks for normal date
-			* 
-			* Valid string(s): DD MM YYYY || DD-MM-YYYY || DD/MM/YYYY || DD.MM.YYYY
-			*/
-			Date : {
-				Class : "date",
-				ErrorText : "This must be a valid date (DD/MM/YYYY)",
-				Pattern : new RegExp(/^((0?[1-9]|[12][0-9]|3[01])[\- \/.](0?[1-9]|1[012])[\- \/.](19|20)?[0-9]{2})*$/i)
-			},
-			/**
-			* Checks for US formatted date
-			* 
-			* Valid string(s): MM DD YYYY || MM-DD-YYYY || MM/DD/YYYY || MM.DD.YYYY
-			*/
-			UsDate : {
-				Class : "usdate",
-				ErrorText : "This must be a valid date (MM/DD/YYYY)",
-				Pattern : new RegExp(/^((0?[1-9]|1[012])[\- \/.](0?[1-9]|[12][0-9]|3[01])[\- \/.](19|20)?[0-9]{2})*$/i)
-			},
-			/**
-			* Checks for date formatted for database
-			*
-			* Valid string(s): YYYY-MM-DD
-			*/
-			MysqlDate : {
-				Class : "mysqldate",
-				ErrorText : "This must be a valid date (YYYY-MM-DD)",
-				Pattern : new RegExp(/^((19|20)?[0-9]{2}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01]))*$/i)
+	this.checks = [
+		/**
+		* Checks for email adresses. This validates most of the email adresses
+		*/
+		{
+			Id : "Email",
+			Class : "email",
+			ErrorText : "This must be a valid email address",
+			check : function (self, object) {
+				return (/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i).test($(object).val()) ? true : self.ErrorText;
 			}
 		},
-
 		/**
-		* Other checks : holder for custom checks
+		* Checks for url
 		*/
-		otherChecks = {
-			/**
-			* Use class "length"
-			* Add these attributes for check options:
-			*  - data-min="###" : Minimum characters
-			*  - data-max="###" : Maximum characters
-			*  - data-counter="xxx" : Counter id
-			*/
-			Length : {
-				Class : "length",
-				MinErrorText : "The minimum required number of characters is [[allowed]]",
-				MaxErrorText : "The maximum allowed number of characters is [[allowed]]",
-				EqualErrorText : "The number of characters must be [[allowed]]",
-				CounterTextMax : "[[current]] <= [[max]]",
-				CounterTextMin : "[[current]] >= [[min]]",
-				CounterTextMinMax : "[[min]] <= [[current]] <= [[max]]",
-				CounterTextEqual : "[[current]] == [[equal]]"
-			},
-			/**
-			* Identical
-			* Add this attribute for check options:
-			*  - data-equalto="xxx" : Id of the field you want the current field to be identical to
-			*/
-			Identical : {
-				Class : "identical",
-				ErrorText : "These fields must match"
-			},
-			/**
-			* Password strength
-			* Add this attribute for check options:
-			*  - data-desc="xxx" : Id of the element where to display the strength
-			*  - data-minstrength="###" : Minimum strength to pass 0 - Max notifications
-			* 
-			* See:
-			* http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
-			*/
-			PasswordStrength : {
-				Class : "strength",
-				ErrorText : "Your password is too weak",
-				Notifications : [
-					"Very weak",
-					"Weak",
-					"Better",
-					"Medium",
-					"Strong",
-					"Strongest"
-				]
+		{
+			Id : "Url",
+			Class : "url",
+			ErrorText : "This must be a valid url",
+			check : function (self, object) {
+				return (/(^|\s)((https?:\/\/)?[\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?)/i).test($(object).val()) ? true : self.ErrorText;
 			}
 		},
-
 		/**
-		* Default options
+		* Checks for IPv4
 		*
-		* You can set these options by passing params.
-		* They are read only by the code
+		* Valid string(s): ###.###.###.###
 		*/
-		settings = {
-			// Asterix that is shown for required fields
-			// You can leave this empty if you don't want asterixes to be shown
-			asterix : "<span class=\"asterix\">*</span>",
-			// Error message that is displayed for invalid fields
-			// ([[text]] will be replaced with actual text)
-			// You can leave this empty if you don't want the error message to be shown
-			errorMessage : "<p class=\"errorMessage\">[[text]]</p>",
-
-			// Class that defines required fields
-			requiredClass : "required",
-
-			// Check field on change
-			checkOnChange : true,
-			// Update info for (some) fields (like length, password strength, ...)
-			updateOnType : true,
-
-			// Scroll to the error field
-			scrollToErrorField : true,
-
-			// Slide animations time
-			animationTime : 250,
-			// Scroll to top animation time
-			scrollTime : 500,
-
-			// Error messages
-			emptyErrorText : "This field is required",
-			formErrorText : "Please check the highlighted fields"
+		{
+			Id : "Ip",
+			Class : "ip",
+			ErrorText : "This must be a valid IP number",
+			check : function (self, object) {
+				return (/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
 		},
-
 		/**
-		* Variables
-		*
-		* These variables are used by the code
+		* Only numbers are allowed
 		*/
-		self = this,
-		errorField = null,
-		form = null,
-		error = false,
-		inputs = [
-			"input",
-			"select",
-			"textarea"
-		];
+		{
+			Id : "Number",
+			Class : "number",
+			ErrorText : "This must contain only numbers",
+			check : function (self, object) {
+				return (/^[0-9]*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Only characters are allowed
+		*/
+		{
+			Id : "Characters",
+			Class : "characters",
+			ErrorText : "This must contain only characters",
+			check : function (self, object) {
+				return (/^[a-zA-Z]*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Characters and digits
+		*/
+		{
+			Id : "Alphanumeric",
+			Class : "alphanumeric",
+			ErrorText : "This must contain only alphanumeric characters",
+			check : function (self, object) {
+				return (/^[a-zA-Z0-9]*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for day
+		*
+		* Valid string(s): 01-31
+		*/
+		{
+			Id : "Day",
+			Class : "day",
+			ErrorText : "This must be a valid day",
+			check : function (self, object) {
+				return (/^([1-9]|[1-2][0-9]|3[01])$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for month
+		*
+		* Valid string(s): 01-31
+		*/
+		{
+			Id : "Month",
+			Class : "month",
+			ErrorText : "This must be a valid month",
+			check : function (self, object) {
+				return (/^(([0]{0,1}[1-9])|(1[0-2]))$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for year
+		*
+		* Valid string(s): 1900 - 2099
+		*/
+		{
+			Id : "Year",
+			Class : "year",
+			ErrorText : "This must be a valid year",
+			check : function (self, object) {
+				return (/^(19|20)\d\d$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for normal date
+		*
+		* Valid string(s): DD MM YYYY || DD-MM-YYYY || DD/MM/YYYY || DD.MM.YYYY
+		*/
+		{
+			Id : "Date",
+			Class : "date",
+			ErrorText : "This must be a valid date (DD/MM/YYYY)",
+			check : function (self, object) {
+				return (/^((0?[1-9]|[12][0-9]|3[01])[\- \/.](0?[1-9]|1[012])[\- \/.](19|20)?[0-9]{2})*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for US formatted date
+		*
+		* Valid string(s): MM DD YYYY || MM-DD-YYYY || MM/DD/YYYY || MM.DD.YYYY
+		*/
+		{
+			Id : "UsDate",
+			Class : "usdate",
+			ErrorText : "This must be a valid date (MM/DD/YYYY)",
+			check : function (self, object) {
+				return (/^((0?[1-9]|1[012])[\- \/.](0?[1-9]|[12][0-9]|3[01])[\- \/.](19|20)?[0-9]{2})*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Checks for date formatted for database
+		*
+		* Valid string(s): YYYY-MM-DD
+		*/
+		{
+			Id : "MysqlDate",
+			Class : "mysqldate",
+			ErrorText : "This must be a valid date (YYYY-MM-DD)",
+			check : function (self, object) {
+				return (/^((19|20)?[0-9]{2}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01]))*$/i).test($(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Use class "length"
+		* Add these attributes for check options:
+		*  - data-min="###" : Minimum characters
+		*  - data-max="###" : Maximum characters
+		*  - data-counter="xxx" : Counter id
+		*/
+		{
+			Id : "Length",
+			Class : "length",
+			MinErrorText : "The minimum required number of characters is [[allowed]]",
+			MaxErrorText : "The maximum allowed number of characters is [[allowed]]",
+			MinMaxErrorText : "The number of characters must be between [[min]] and [[max]]",
+			EqualErrorText : "The number of characters must be [[allowed]]",
+			CounterTextMax : "[[current]] <= [[max]]",
+			CounterTextMin : "[[current]] >= [[min]]",
+			CounterTextMinMax : "[[min]] <= [[current]] <= [[max]]",
+			CounterTextEqual : "[[current]] == [[equal]]",
+			check : function (self, object, updateCounterOnly) {
+				var counter,
+					toReturn = true,
+					counterText = "",
+					maxChars = parseInt($(object).data("max"), 10),
+					minChars = parseInt($(object).data("min"), 10);
+
+				// Set the default to false
+				updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
+
+				// Check what the user wants
+				if (!isNaN(maxChars) && isNaN(minChars)) {
+					// Only maxChars are defined
+					if ($(object).val().length > maxChars) {
+						toReturn = self.MaxErrorText.replace("[[allowed]]", maxChars);
+						counterText = self.CounterTextMax;
+					}
+				} else if (!isNaN(minChars) && isNaN(maxChars)) {
+					// Only minChars are defined
+					if ($(object).val().length < minChars) {
+						toReturn = self.MinErrorText.replace("[[allowed]]", minChars);
+						counterText = self.CounterTextMin;
+					}
+				} else if (!isNaN(maxChars) && !isNaN(minChars)) {
+					// Both are defined
+					if (minChars >= 0) {
+						// Minchars is greater than or equal to 0
+						if (maxChars > minChars) {
+							// maxChars should be always be greater than minChars
+							if (!($(object).val().length >= minChars && $(object).val().length <= maxChars)) {
+								toReturn = self.MinMaxErrorText.replace("[[min]]", minChars).replace("[[max]]", maxChars);
+								counterText = self.CounterTextMinMax;
+							}
+						} else if (maxChars === minChars) {
+							// If they are the same, consider the developer wants a string of a given length
+							if ($(object).val().length !== minChars) {
+								toReturn = self.EqualErrorText.replace("[[allowed]]", minChars);
+								counterText = self.CounterTextEqual;
+							}
+						}
+					}
+				}
+
+				// We check the id
+				counter = $($(object).data("counter"));
+				// Check if there's a counter container on the page.
+				if ($(counter).length > 0) {
+					$(counter).text(
+						counterText
+							.replace("[[min]]", minChars)
+							.replace("[[current]]", $(object).val().length)
+							.replace("[[max]]", maxChars)
+							.replace("[[equal]]", maxChars)
+					);
+
+					if (toReturn !== true) {
+						counter.addClass("error");
+					} else {
+						counter.removeClass("error");
+					}
+				}
+
+				if (!updateCounterOnly) {
+					return toReturn;
+				}
+			}
+		},
+		/**
+		* Identical
+		* Add this attribute for check options:
+		*  - data-equalto="xxx" : Id of the field you want the current field to be identical to
+		*/
+		{
+			Id : "Identical",
+			Class : "identical",
+			ErrorText : "These fields must match",
+			check : function (self, object) {
+				var equalTo = $($(object).data("equalto"));
+				if (equalTo.length === 0) {
+					return true;
+				}
+
+				return ($(equalTo).val() === $(object).val()) ? true : self.ErrorText;
+			}
+		},
+		/**
+		* Password strength
+		* Add this attribute for check options:
+		*  - data-desc="xxx" : Id of the element where to display the strength
+		*  - data-minstrength="###" : Minimum strength to pass 0 - Max notifications
+		*
+		* See:
+		* http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
+		*/
+		{
+			Id : "PasswordStrength",
+			Class : "strength",
+			ErrorText : "Your password is too weak",
+			Notifications : [
+				"Very weak",
+				"Weak",
+				"Better",
+				"Medium",
+				"Strong",
+				"Strongest"
+			],
+			check : function (self, object, updateCounterOnly) {
+				var score = 0,
+					value = $(object).val(),
+					descContainer = $($(object).data("desc")),
+					minStrength = parseInt($(object).data("minstrength"), 10);
+
+				updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
+
+				// Password longer than 6 chars
+				score += (value.length > 6) ? 1 : 0;
+				// Uses lower and uppercase characters
+				score += (value.match(/[a-z]/) && value.match(/[A-Z]/)) ? 1 : 0;
+				// At least one digit
+				score += (value.match(/\d+/)) ? 1 : 0;
+				// At least one special character
+				score += (value.match(/\.[!,@,#,$,%,\^,&,*,?,_,~,-,(,)]/)) ? 1 : 0;
+				// Password longer than 12 chars
+				score += (value.length > 12) ? 1 : 0;
+
+				// Update notification
+				if ($(descContainer).length === 1) {
+					$(descContainer).text(self.Notifications[score])
+						.removeClass()
+						.addClass("strength" + score);
+				}
+
+				// Add error
+				if (typeof minStrength !== "undefined" && !updateCounterOnly) {
+					if (score < minStrength) {
+						return self.ErrorText;
+					}
+				}
+
+				return true;
+			}
+		},
+		/**
+		 * Checks checkboxes or radio buttons for at least one selected input
+		 */
+		{
+			Id : "CheckBoxCount",
+			Class : "count",
+			ErrorText : "Please select at least one value",
+			check : function (self, object) {
+				var atLeastOneSelected = false;
+				$(object).find("input[type=\"checkbox\"], input[type=\"radio\"]").each(function () {
+					if (typeof $(this).attr("checked") !== "undefined") {
+						atLeastOneSelected = true;
+						return false;
+					}
+				});
+
+				return atLeastOneSelected;
+			}
+		}
+	];
 
 	/**
-	* Pre-init
-	* Sets the options, form and inits the logic.
+	* Default options
 	*
-	* @param object Form to validate
-	* @param object Options-object
+	* You can set these options by passing params.
+	* They are read only by the code
 	*/
-	Sfc.prototype.construct = function (f, options) {
-		form = f;
+	this.settings = {
+		// Asterix that is shown for required fields
+		// You can leave this empty if you don't want asterixes to be shown
+		asterix : "<span class=\"asterix\">*</span>",
+		// Error message that is displayed for invalid fields
+		// ([[text]] will be replaced with actual text)
+		// You can leave this empty if you don't want the error message to be shown
+		errorMessage : "<p class=\"errorMessage\">[[text]]</p>",
+
+		// Class that defines required fields
+		requiredClass : "required",
+		// Class that will be added to the input if it is not valid
+		errorClass : "error",
+		// Class that will be added to the form if the input is not filled in,
+		// used with labels inside the input field
+		emptyClass : "empty",
+
+		// Check field on change
+		checkOnChange : true,
+		// Update info for (some) fields (like length, password strength, ...)
+		updateOnType : true,
+
+		// Scroll to the error field
+		scrollToErrorField : true,
+
+		// Slide animations time
+		animationTime : 250,
+		// Scroll to top animation time
+		scrollTime : 500,
+
+		// If true all the binded events on the form are only triggered
+		// when form has completed its check and is valid.
+		// If set to false, the events will be left unchanged
+		blockEvents : true,
+
+		// Error messages
+		emptyErrorText : "This field is required",
+		formErrorText : "Please check the highlighted fields"
+	};
+
+	/**
+	* Variables
+	*
+	* These variables are used by the code
+	*/
+	this.originalEvents = {
+		submit : []
+	};
+	this.formSubmitEvent = null;
+	this.errorField = null;
+	this.error = false;
+	this.inputsToCheck = [
+		"input",
+		"select",
+		"textarea",
+		"div.count"
+	];
+
+	this.form = form;
+	// Set options
+	this.extendOptions(options);
+	// Init logic
+	this.init();
+}
+
+/**
+* Initialise
+*
+* - Add asterix on the fields where it is needed
+* - Set the form to validate on a field change
+* - Validate the form on submit
+* - Checks a field length on keyup
+*/
+Sfc.prototype.init = function () {
+	var i, l,
 		self = this;
-		// Set options
-		self.handleOptions(options);
-		// Init logic
-		self.init();
-	};
 
-	/**
-	* Initialise
-	* 
-	* - Add asterix on the fields where it is needed
-	* - Set the form to validate on a field change
-	* - Validate the form on submit
-	* - Checks a field length on keyup
-	*/
-	this.init = function () {
-		var i,
-			inputCount = inputs.length;
+	// Loop
+	for (i = 0, l = this.inputsToCheck.length; i < l; i += 1) {
+		$(this.form).find(this.inputsToCheck[i]).each(function () {
+			// Add asterixes
+			if (self.settings.asterix !== "") {
+				if ($(this).hasClass(self.settings.requiredClass)) {
+					$(this).parent(":first")
+						.append(self.settings.asterix);
+				}
+			}
 
-		// Loop
-		for (i = 0; i < inputCount; i += 1) {
-			$(form).find(inputs[i]).each(function () {
-				// Add asterixes
-				if (settings.asterix !== "") {
-					if ($(this).hasClass(settings.requiredClass)) {
-						$(this).parent(":first")
-							.append(settings.asterix);
+			// Validate field on change (check if it is needed)
+			if (self.settings.checkOnChange) {
+				$(this).on("change", function () {
+					self.checkField(this);
+				});
+			}
+
+			// These are only needed on inputs
+			if (self.inputsToCheck[i] === "input") {
+				if (self.settings.updateOnType) {
+					// Check length of fields
+					if ($(this).hasClass(self.getCheck("Length").Class)) {
+						$(this).on("keyup", function () {
+							self.getCheck("Length").check(self.getCheck("Length"), this, true);
+						});
+
+						// Also update counter on start
+						self.getCheck("Length").check(self.getCheck("Length"), this, true);
+					}
+
+					// Check password strength on type
+					if ($(this).hasClass(self.getCheck("PasswordStrength").Class)) {
+						$(this).on("keyup", function () {
+							self.getCheck("PasswordStrength").check(self.getCheck("PasswordStrength"), this, true);
+						});
 					}
 				}
+			}
 
-				// Validate field on change (check if it is needed)
-				if (settings.checkOnChange) {
-					$(this).bind("change", function () {
-						self.checkField($(this));
-					});
-				}
-
-				// These are only needed on inputs
-				if (inputs[i] === "input") {
-					if (settings.updateOnType) {
-						// Check length of fields
-						if ($(this).hasClass(otherChecks.Length.Class)) {
-							$(this).bind("keyup", function () {
-								self.validateFieldLength($(this), true);
-							});
-
-							// Also update counter on start
-							self.validateFieldLength($(this), true);
-						}
-
-						// Check password strength on type
-						if ($(this).hasClass(otherChecks.PasswordStrength.Class)) {
-							$(this).bind("keyup", function () {
-								self.checkPasswordStrength($(this), true);
-							});
-						}
-					}
-				}
-			});
-		}
-
-		// Validate on submit
-		$(form).submit(function () {
-			return self.checkForm();
+			if (self.inputsToCheck[i] === "input" ||
+					self.inputsToCheck[i] === "textarea") {
+				// Display prefilled help text
+				$(this).on("blur", function () {
+					self.displayFieldTitle(this);
+				}).on("focus", function () {
+					self.clearFieldTitle(this);
+				});
+				self.displayFieldTitle(this);
+			}
 		});
-	};
+	}
 
-	/**
-	* Sets the options
-	*
-	* @param Options-object
-	*/
-	this.handleOptions = function (options) {
-		// Loop for normal settings
-		var param,
-			check;
-
-		if (typeof options !== "undefined") {
-			for (param in options) {
-				if (typeof settings[param] !== "undefined") {
-					settings[param] = options[param];
-				}
-			}
-		}
-
-		// Loop for regexes
-		if (typeof options.errorText !== "undefined") {
-			for (check in options.errorText) {
-				if (typeof regexChecks[check] !== "undefined") {
-					regexChecks[check].ErrorText = options.errorText[check];
-				}
-			}
-
-			for (check in options.errorText) {
-				if (typeof otherChecks[check] !== "undefined") {
-					otherChecks[check].ErrorText = options.errorText[check];
-				}
-			}
-		}
-	};
-
-	/**
-	* Checks the form
-	*
-	* @param object Form that's need to be checked
-	* @return bool Form valid?
-	*/
-	this.checkForm = function () {
-		var i,
-			errorContainer,
-			inputCount = inputs.length;
-
-		// Reset
-		error = false;
-
-		// Check each input
-		for (i = 0; i < inputCount; i += 1) {
-			$(form).find(inputs[i]).each(function () {
-				self.checkField($(this));
+	// Save original events to trigger them later
+	if (this.settings.blockEvents === true) {
+		if (typeof $._data(this.form, "events") !== "undefined") {
+			$($._data(this.form, "events").submit).each(function (index) {
+				self.originalEvents.submit[index] = {
+					handler : this.handler
+				};
 			});
 		}
+		
+		this.removeOriginalEvents();
+	}
+	
+	// Validate on submit
+	this.formSubmitEvent = function (e) {
+		return self.checkForm(e);
+	};
+	$(this.form).on("submit", this.formSubmitEvent);
+};
 
-		// Don't submit the form if there's a error
-		if (error) {
-			if (settings.scrollToErrorField) {
-				self.scrollToErrorField();
+Sfc.prototype.removeOriginalEvents = function () {
+	var i, l;
+
+	for (i = 0, l = this.originalEvents.submit.length; i < l; i += 1) {
+		if (typeof this.originalEvents.submit[i].handler !== "undefined") {
+			$(this.form).off("submit", this.originalEvents.submit[i].handler);
+		}
+	}
+};
+
+Sfc.prototype.addOriginalEvents = function () {
+	var i, l;
+
+	for (i = 0, l = this.originalEvents.submit.length; i < l; i += 1) {
+		if (typeof this.originalEvents.submit[i].handler !== "undefined") {
+			$(this.form).on("submit", this.originalEvents.submit[i].handler);
+		}
+	}
+};
+
+Sfc.prototype.displayFieldTitle = function (input) {
+	if (typeof $(input).attr('title') !== "undefined" && $(input).val() === "") {
+		$(input).addClass(this.settings.emptyClass);
+		$(input).val($(input).attr('title'));
+	}
+};
+
+Sfc.prototype.clearFieldTitle = function (input) {
+	if ($(input).val() === $(input).attr('title')) {
+		$(input).removeClass(this.settings.emptyClass);
+		$(input).val("");
+	}
+};
+
+/**
+* Sets the options
+*
+* @param Options-object
+*/
+Sfc.prototype.extendOptions = function (options) {
+	// Extend settings
+	if (typeof options.settings !== "undefined") {
+		$.extend(this.settings, options.settings);
+	}
+
+	// Extend checks
+	if (typeof options.checks !== "undefined") {
+		// Internal check handling is different than the one you pass
+		// You need to pass the Id of the check as array key
+		for (check in options.checks) {
+			if (this.getCheck(check) !== null) {
+				$.extend(this.getCheck(check), options.checks[check]);
 			}
+		}
+		
+	}
+};
 
-			// Message if form is not valid
-			errorContainer = $(form).data("errmessage");
-			if (typeof errorContainer !== "undefined") {
-				$("#" + errorContainer).text(settings.formErrorText);
-			}
+/**
+ * Gets check by name
+ * @param  string id Check Id
+ * @return Object or null
+ */
+Sfc.prototype.getCheck = function (id) {
+	var i, l;
 
+	for (i = 0, l = this.checks.length; i < l; i += 1) {
+		if (this.checks[i].Id === id) {
+			return this.checks[i];
+		}
+	}
+
+	return null;
+};
+
+/**
+* Checks the form
+*
+* @param object Form that's need to be checked
+* @return bool Form valid?
+*/
+Sfc.prototype.checkForm = function (e) {
+	var i, l,
+		self = this;
+
+	// Reset
+	this.error = false;
+	this.errorField = null;
+
+	// Check each input
+	for (i = 0, l = this.inputsToCheck.length; i < l; i += 1) {
+		$(this.form).find(this.inputsToCheck[i]).each(function () {
+			self.clearFieldTitle(this);
+			self.checkField(this);
+			self.displayFieldTitle(this);
+		});
+	}
+
+	// Don't submit the form if there's a error
+	if (this.error) {
+		if (this.settings.scrollToErrorField) {
+			this.scrollToErrorField();
+		}
+
+		// Message if form is not valid
+		$($(this.form).data("err-elm")).text(this.settings.formErrorText);
+
+		e.preventDefault();
+		return false;
+	}
+	
+	for (i = 0, l = this.inputsToCheck.length; i < l; i += 1) {
+		$(this.form).find(this.inputsToCheck[i]).each(function () {
+			self.clearFieldTitle(this);
+		});
+	}
+
+	if (this.settings.blockEvents === true) {
+		// Remove this function (prevent endless loop)
+		$(this.form).off("submit", this.formSubmitEvent);
+		// Add original event listeners to the form
+		this.addOriginalEvents();
+		// Trigger them
+		$(this.form).trigger("submit");
+		// Remove them
+		this.removeOriginalEvents();
+		// Now bind the form submit event
+		$(this.form).on("submit", this.formSubmitEvent);
+
+		// We prevent the form to be submitted
+		// if there are any other events binded to it
+		if (this.originalEvents.submit.length > 0) {
+			e.preventDefault();
 			return false;
 		}
-		return true;
-	};
+	}
+};
 
-	this.scrollToErrorField = function () {
-		// Animate to top?
-		$("html, body").animate({
-			scrollTop : errorField.offset().top
-		}, settings.scrollTime);
+Sfc.prototype.scrollToErrorField = function () {
+	var self = this;
+	// Animate to top?
+	$("html, body").animate({
+		scrollTop : $(self.errorField).offset().top
+	}, this.settings.scrollTime);
 
-		// Focus on the first error field
-		errorField.focus();
-	};
+	// Focus on the first error field
+	$(this.errorField).focus();
+};
 
-	/**
-	* Checks current field on added classes and validates the field based on them
-	*
-	* @param object Field to check
-	*/
-	this.checkField = function (object) {
-		var check,
-			err = false;
+/**
+* Checks current field on added classes and validates the field based on them
+*
+* @param object Field to check
+*/
+Sfc.prototype.checkField = function (object) {
+	var i, l, checkStatus, radioGroup, somethingChecked,
+		fieldRequired = $(object).hasClass("required"),
+		err = false;
 
-		// Check on errors
-		if (!err && object.hasClass("required") && object.val() === "") {
-			err = self.addError(object, settings.emptyErrorText);
-		} else if (!err && self.validateFieldLength(object)) {
-			err = true;
-		} else if (!err && self.validateIdentical(object)) {
-			err = true;
-		} else if (!err && self.checkPasswordStrength(object)) {
-			err = true;
+	// Check if field is filled in (or selected/checked)
+	if (fieldRequired) {
+		if ($(object).attr("type") === "checkbox" && $(object).attr("checked") !== "checked") {
+			err = this.addError(object, this.settings.emptyErrorText);
+		} else if ($(object).attr("type") === "radio") {
+			// Find all radio's that are in a group
+			radioGroup = $(this.form).find("input[name=\"" + $(object).attr("name") + "\"]");
+
+			// Check if any of the radio buttons is checked
+			somethingChecked = false;
+			for (i = 0, l = radioGroup.length; i < l; i += 1) {
+				if ($(radioGroup[i]).attr("checked") === "checked") {
+					somethingChecked = true;
+				}
+			}
+
+			// If non of the radio buttons is checked in the group, add an error
+			if (!somethingChecked) {
+				err = this.addError(object, this.settings.emptyErrorText);
+			}
+		} else if ($(object).val() === "") {
+			err = this.addError(object, this.settings.emptyErrorText);
 		}
+	}
 
-		// Do regex checks on it
-		if (!err) { // No need to check if the field is already invalid
-			if (typeof regexChecks !== "undefined") {
-				for (check in regexChecks) {
-					if (object.hasClass(regexChecks[check].Class)
-							&& !regexChecks[check].Pattern.test(object.val())
-							&& object.val() !== "") {
-						err = self.addError(object, regexChecks[check].ErrorText);
+	// Process other checks
+	if (!err) {
+		for (i = 0, l = this.checks.length; i < l; i += 1) {
+			// Check if something is filled in,
+			// you can has non required fields that still must be validated
+			if ($(object).val() !== "" || $(object).prop("tagName") === "DIV") {
+				// Check if current field needs to be checked
+				if ($(object).hasClass(this.checks[i].Class)) {
+					// Check if validation is true or an error message
+					checkStatus = this.checks[i].check(this.checks[i], object);
+					if (checkStatus !== true) {
+						err = this.addError(object, checkStatus);
+						break;
 					}
 				}
 			}
 		}
+	}
 
-		// Remove error if any
-		if (!err) {
-			self.removeError(object);
-		}
-	};
+	// Remove error if any
+	if (!err) {
+		this.removeError(object);
+	}
+};
 
-	/**
-	* Validates password strength
-	* http://codeassembly.com/How-to-make-a-password-strength-meter-for-your-register-form/
-	*
-	* @param object Field to check
-	* @param bool Update counter only? It doesn't validate the field while typing because it's annoying
-	* @return bool Error
-	*/
-	this.checkPasswordStrength = function (object, updateCounterOnly) {
-		var score = 0,
-			err = false,
-			value = $(object).val(),
-			descContainer = $("#" + $(object).data("desc")),
-			minStrength = $(object).data("minstrength");
+/**
+* Adds an error + adds class "error" on the field
+*
+* @param object Field
+* @param string Error text that will be displayed
+* @return bool True
+*/
+Sfc.prototype.addError = function (object, text) {
+	var errorMessageElement;
 
-		updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
+	if (this.errorField === null) {
+		this.errorField = object;
+	}
 
-		// Password longer than 6 chars
-		if (value.length > 6) {
-			score += 1;
-		}
+	if (typeof $(object).data("err-msg") !== "undefined" &&
+			$(object).data("err-msg") !== "") {
+		text = $(object).data("err-msg");
+	}
 
-		// Password has both lower- and uppercase characters
-		if (value.match(/[a-z]/) && value.match(/[A-Z]/)) {
-			score += 1;
-		}
-
-		// Password has at least 1 number
-		if (value.match(/\d+/)) {
-			score += 1;
-		}
-
-		// Password has at least 1 special character
-		if (value.match(/\.[!,@,#,$,%,\^,&,*,?,_,~,-,(,)]/)) {
-			score += 1;
-		}
-
-		// If password is longer than 12 characters
-		if (value.length > 12) {
-			score += 1;
-		}
-
-		// Update notification
-		if (descContainer.length === 1) {
-			$(descContainer).text(otherChecks.PasswordStrength.Notifications[score])
-				.removeClass()
-				.addClass("strength" + score);
-		}
-
-		// Add error
-		if (typeof minStrength !== "undefined" && !updateCounterOnly) {
-			if (score < minStrength) {
-				err = self.addError(object, otherChecks.PasswordStrength.ErrorText);
-			}
-		}
-
-		return err;
-	};
-
-	/**
-	* Validates the field length.
-	*
-	* @param object Field to check
-	* @return bool Error
-	*/
-	this.validateIdentical = function (object) {
-		var equalToField,
-			err = false,
-			equalTo = $(object).data("equalto");
-
-		if (typeof equalTo !== "undefined") {
-			equalToField = $("#" + equalTo);
-			if (equalToField.length === 1) { // There is only one field with this id
-				if ($(equalToField).val() !== $(object).val()) { // Those two fields are not identical
-					err = self.addError(object, otherChecks.Identical.ErrorText);
-					self.addError(equalToField, otherChecks.Identical.ErrorText);
-				} else {
-					// No need to remove error on the field as this will be removed later
-					self.removeError(equalToField);
-				}
-			}
-		}
-
-		return err;
-	};
-
-	/**
-	* Validates the field length.
-	*
-	* @param Field to check
-	* @param Update counter only? It doesn't validate the field while typing because it's annoying
-	* @return Error
-	*/
-	this.validateFieldLength = function (object, updateCounterOnly) {
-		// Set the default to false
-		updateCounterOnly = (typeof updateCounterOnly === "undefined") ? false : updateCounterOnly;
-		var err = false,
-			counterText = "",
-			checkWhat = "",
-			maxChars = $(object).data("max"),
-			minChars = $(object).data("min");
-
-		if (object.hasClass(otherChecks.Length.Class) && (object.attr("type") === "text" || object.attr("type") === "password")) {
-			// Check what the user wants
-			if (typeof maxChars !== "undefined" && typeof minChars === "undefined") { // Only maxChars are defined
-				counterText = otherChecks.Length.CounterTextMax;
-				checkWhat = "maxchars";
-			} else if (typeof minChars !== "undefined" && typeof maxChars === "undefined") { // Only minChars are defined
-				counterText = otherChecks.Length.CounterTextMin;
-				checkWhat = "minchars";
-			} else if (typeof maxChars !== "undefined" && typeof minChars !== "undefined") { // Both are defined
-				if (minChars >= 0) { // Minchars is greater than or equal to 0
-					if (maxChars > minChars) { // maxChars should be always be greater than minChars
-						counterText = otherChecks.Length.CounterTextMinMax;
-						checkWhat = "bothchars";
-					} else if (maxChars === minChars) { // If they are the same, consider the developer wants a string of a given length
-						counterText = otherChecks.Length.CounterTextEqual;
-						checkWhat = "equalchars";
-					}
-				}
-			}
-
-			// Check error
-			if (!err && (checkWhat === "maxchars" || checkWhat === "bothchars") && object.val().length > maxChars) { // Above maxChars
-				err = (!updateCounterOnly) ? self.addError(object, otherChecks.Length.MaxErrorText.replace("[[allowed]]", maxChars)) : true;
-			} else if (!err && (checkWhat === "minchars" || checkWhat === "bothchars") && object.val().length < minChars) { // Under minChars
-				err = (!updateCounterOnly) ? self.addError(object, otherChecks.Length.MinErrorText.replace("[[allowed]]", minChars)) : true;
-			} else if (!err && checkWhat === "equalchars" && object.val().length !== maxChars) { // Not equal to
-				err = (!updateCounterOnly) ? self.addError(object, otherChecks.Length.EqualErrorText.replace("[[allowed]]", maxChars)) : true;
-			}
-
-			// Update and show the counter
-			self.updateCounter(
-				object,
-				counterText,
-				maxChars,
-				minChars,
-				err
-			);
-		}
-
-		return err;
-	};
-
-	/**
-	* Updates counter
-	*
-	* @param object Field to check
-	* @param string Text that needs to be displayed
-	* @param int Max allowed characters
-	* @param int Min required characters
-	* @param string Error text
-	*/
-	this.updateCounter = function (object, counterText, max, min, err) {
-		// We check the id
-		var counter = $("#" + $(object).data("counter"));
-
-		// Check if there's a counter container on the page.
-		if (counter.length === 1) {
-			min = (typeof min === "undefined") ? "" : min;
-			max = (typeof max === "undefined") ? "" : max;
-			$(counter).text(
-				counterText
-					.replace("[[min]]", min)
-					.replace("[[current]]", $(object).val().length)
-					.replace("[[max]]", max)
-					.replace("[[equal]]", max)
-			);
-
-			if (err) {
-				$(counter).addClass("error");
+	// Add explaining error text
+	if (typeof text !== "undefined" || text !== "") {
+		// Nope, nothing found, create new one
+		errorMessageElement = this.getErrorElement(object);
+		if (errorMessageElement !== null) {
+			// Check if an error is already there
+			if (errorMessageElement.length === 0) {
+				// If not, add a new p.errorText to it.
+				$(this.settings.errorMessage.replace("[[text]]", text))
+					.hide()
+					.appendTo($(object).parent(":first"))
+					.slideDown(this.settings.animationTime);
 			} else {
-				$(counter).removeClass("error");
+				// If it's there, just change the text to a new one.
+				$(errorMessageElement)
+					.hide()
+					.html(text)
+					.slideDown(this.settings.animationTime);
 			}
 		}
-	};
+	}
 
-	/**
-	* Adds an error + adds class "error" on the field
-	*
-	* @param object Field
-	* @param string Error text that will be displayed
-	* @return bool True
-	*/
-	this.addError = function (object, text) {
-		var errorMessageElement;
+	$(object).addClass(this.settings.errorClass);
+	this.error = true;
+	return true;
+};
 
-		if (errorField === null) {
-			errorField = object;
-		}
+/**
+* Removes error, duh
+*
+* @param object Field
+*/
+Sfc.prototype.removeError = function (object) {
+	var errorMessageElement;
 
-		// Add explaining error text
-		if (typeof text !== "undefined" || text !== "") {
-			// Check if user has defined custom error element
-			errorMessageElement = $("#" + $(object).data("errmessage"));
-			if (errorMessageElement.length === 1) { // User has defined one
-				if (errorMessageElement.html() === "") {
-					errorMessageElement.hide()
-						.html(text)
-						.slideDown(settings.animationTime);
-				} else {
-					errorMessageElement.html(text).slideDown(settings.animationTime);
-				}
-			} else { // Nope, nothing found, create new one
-				errorMessageElement = self.getErrorElement(object);
-				// Check if an error is already there
-				if (errorMessageElement.length === 0) {
-					// If not, add a new p.errorText to it.
-					$(settings.errorMessage.replace("[[text]]", text))
-						.hide()
-						.appendTo(object.parent(":first"))
-						.slideDown(settings.animationTime);
-				} else {
-					// If it's there, just change the text to a new one.
-					errorMessageElement.html(text);
-				}
-			}
-		}
+	// Reset field
+	$(object).removeClass(this.settings.errorClass);
 
-		object.addClass("error");
-		error = true;
-		return true;
-	};
+	errorMessageElement = this.getErrorElement(object);
+	if (errorMessageElement !== null) {
+		errorMessageElement.slideUp(this.settings.animationTime);
+	}
+};
 
-	/**
-	* Removes error, duh
-	*
-	* @param object Field
-	*/
-	this.removeError = function (object) {
-		var errorMessageElement;
+/**
+* Gets the error element for the given field
+*
+* @param object Field
+* @return object Error element
+*/
+Sfc.prototype.getErrorElement = function (object) {
+	var linkedErrorMessageElement;
+	if (this.settings.errorMessage === "" ||
+			this.settings.errorMessage === null ||
+			this.settings.errorMessage === false) {
+		return null;
+	}
 
-		// Reset field
-		object.removeClass("error");
+	linkedErrorMessageElement = $($(object).data("err-elm"));
+	if (linkedErrorMessageElement.length > 0) {
+		return linkedErrorMessageElement;
+	}
 
-		// Check if user has defined custom error element
-		errorMessageElement = $("#" + $(object).data("errmessage"));
-		if (errorMessageElement.length === 1) { // User has defined one
-			errorMessageElement.slideUp(settings.animationTime);
-		} else {
-			// Remove the text
-			self.getErrorElement(object).slideUp(settings.animationTime)
-				.queue(function () {
-					$(this).remove();
-				});
-		}
-	};
-
-	/**
-	* Gets the error element for the given field
-	*
-	* @param object Field
-	* @return object Error element
-	*/
-	this.getErrorElement = function (object) {
-		return object
-			.parent(":first")
-			.children(
-				$(settings.errorMessage)[0].nodeName + "." + $(settings.errorMessage).attr("class")
-			);
-	};
-}
+	return $(object)
+		.parent(":first")
+		.children(
+			$(this.settings.errorMessage)[0].nodeName + "." + $(this.settings.errorMessage).attr("class")
+		);
+};
 
 (function ($) {
 	"use strict";
-	jQuery.fn.SimpleFormChecker = function (options) {
-		var i,
-			len,
-			form,
-			args,
-			sfc;
+	var checkers = [];
+	$.fn.SimpleFormChecker = function (options) {
+		var i, l,
+			args;
 
-		for (i = 0, len = this.length; i < len; i += 1) {
-			form = $(this[i]);
-			args = options || {};
-			sfc = new Sfc().construct(form, args);
+		for (i = 0, l = this.length; i < l; i += 1) {
+			// Create checker
+			if (typeof $(this[i]).data("sfc-index") === "undefined") {
+				args = options || {};
+				checkers[checkers.length] = new Sfc(this[i], args, $);
+				$(this[i]).data("sfc-index", i);
+			}
 		}
 	};
 }(jQuery));

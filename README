@@ -1,41 +1,7 @@
 SimpleFormChecker is a plugin for jquery that make the validation of forms easier.
 See full description at: http://alexju.be/archive/sfc/
 
-SimpleFormChecker is well documented script so you don't need much information to make it work.    
-I will explain some settings and options here:
-
-
-+-|PARAMETERS|---------+------------+-------------------------------------------------------+
-|                      |            |                                                       |
-|  Parameter           |  Default   |  Description                                          |
-|                      |            |                                                       |
-+----------------------+------------+-------------------------------------------------------+
-|  asterix             |  "string"  |  Asterix is shown near a field that is required       |
-+----------------------+------------+-------------------------------------------------------+
-|  errorMessage        |  "string"  |  Error-message-element                                |
-+----------------------+------------+-------------------------------------------------------+
-|  requiredClass       |  "string"  |  Class for required fields                            |
-+----------------------+------------+-------------------------------------------------------+
-|  checkOnChange       |  true      |  Validate field if it's changed                       |
-+----------------------+------------+-------------------------------------------------------+
-|  updateOnType        |  true      |  Update some fields on key up                         |
-+----------------------+------------+-------------------------------------------------------+
-|  scrollToErrorField  |  true      |  Scroll to the first error field                      |
-+----------------------+------------+-------------------------------------------------------+
-|  animationTime       |  250       |  Animation time                                       |
-+----------------------+------------+-------------------------------------------------------+
-|  scrollTime          |  500       |  Animation time while scrolling to top                |
-+----------------------+------------+-------------------------------------------------------+
-|  emptyErrorText      |  "string"  |  Error text that is shown for a required field        |
-+----------------------+------------+-------------------------------------------------------+
-|  formErrorText       |  "string"  |  This text will be shown if a form is invalid         |
-|                      |            |  (use with data-errmessage="xxx" on the form)         |
-+----------------------+------------+-------------------------------------------------------+
-|  errorText.OBJECT    |  "string"  |  Error messages for Regex-validators                  |
-|                      |            |  Now also for custom checks                           |
-+----------------------+------------+-------------------------------------------------------+
-
-
+SimpleFormChecker is well documented script so you don't need much information to make it work.
 You can find all the information on various validators in the source, just check them there ;)
 
 
@@ -69,4 +35,6 @@ You can find all the information on various validators in the source, just check
 |           |              |  Some settings were deleted as showAsterix or showError, now   |
 |           |              |  you can just pass an empty string and it won't show anything. |
 |           |  2012-01-14  |  Fixed some text replacements.                                 |
++-----------+--------------+----------------------------------------------------------------+
+|  0.1.9    |  2012-09-12  |  Refractored and added few checks and settings                 |
 +-----------+--------------+----------------------------------------------------------------+
